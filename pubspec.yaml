@@ -1,0 +1,28 @@
+name: apn_widgets
+description: A carefully curated collection of widget made by and used within Appnormal projects
+version: 0.0.1
+homepage: https://appnormal.com
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+  flutter: ">=1.17.0 <2.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  apn_http: ^0.5.1
+  flutter_sfsymbols: ^1.0.0
+  keyboard_visibility: ^0.5.6
+  app_settings: ^4.0.3
+  intl:
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - lib/assets/
+    - lib/assets/2.0x/
+    - lib/assets/3.0x/
