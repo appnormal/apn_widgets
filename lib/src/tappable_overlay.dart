@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 import 'extensions.dart';
 
@@ -39,12 +40,11 @@ class TappableOverlay extends StatefulWidget {
     this.behaviour,
     this.disableIosTappable = false,
     this.shape,
-  })
-      : assert(
-  (expandWidth == true && expandHeight == false) ||
-      (expandWidth == false && expandHeight == true) ||
-      (expandWidth == false && expandHeight == false),
-  'Setting both expand width and expand height is not allowed'),
+  })  : assert(
+            (expandWidth == true && expandHeight == false) ||
+                (expandWidth == false && expandHeight == true) ||
+                (expandWidth == false && expandHeight == false),
+            'Setting both expand width and expand height is not allowed'),
         super(key: key);
 
   @override
@@ -53,12 +53,11 @@ class TappableOverlay extends StatefulWidget {
 
 class _TappableOverlayState extends State<TappableOverlay> {
   bool pressed = false;
+  Size childSize;
 
   @override
   Widget build(BuildContext context) {
-    final isIos = Theme
-        .of(context)
-        .platform == TargetPlatform.iOS || widget.disableIosTappable;
+    final isIos = Theme.of(context).platform == TargetPlatform.iOS || widget.disableIosTappable;
     final pressedColor = (widget.pressedColor ?? Colors.white).withOpacity(0.3);
     final highlightColor = widget.highlightColor ?? pressedColor.darken().withOpacity(0.2);
 
@@ -71,12 +70,9 @@ class _TappableOverlayState extends State<TappableOverlay> {
       child = Row(children: [Expanded(child: child)]);
     }
 
-    final hiddenChild = Visibility(
-      child: child,
-      visible: false,
-      maintainSize: true,
-      maintainAnimation: true,
-      maintainState: true,
+    final childSizeContainer = Container(
+      width: childSize?.width ?? 0,
+      height: childSize?.height ?? 0,
     );
 
     if (isIos) {
@@ -100,7 +96,7 @@ class _TappableOverlayState extends State<TappableOverlay> {
                   shape: widget.shape,
                   borderRadius: widget.borderRadius,
                   color: pressedColor,
-                  child: hiddenChild, // Hidden child so the tap is the size of the child
+                  child: childSizeContainer,
                 ),
               ),
             ],
@@ -122,7 +118,7 @@ class _TappableOverlayState extends State<TappableOverlay> {
                 customBorder: widget.shape,
                 splashColor: highlightColor,
                 highlightColor: highlightColor,
-                child: hiddenChild,
+                child: childSizeContainer,
                 onTap: widget.onTap,
               ),
             ),
@@ -131,7 +127,10 @@ class _TappableOverlayState extends State<TappableOverlay> {
       );
     }
 
-    return child;
+    return _MeasureSize(
+      onChange: (size) => setState(() => childSize = size),
+      child: child,
+    );
   }
 
   void onTapUp() {
@@ -146,3 +145,44 @@ class _TappableOverlayState extends State<TappableOverlay> {
     });
   }
 }
+
+class _MeasureSize extends StatefulWidget {
+  final Widget child;
+  final OnWidgetSizeChange onChange;
+
+  const _MeasureSize({
+    Key key,
+    @required this.onChange,
+    @required this.child,
+  }) : super(key: key);
+
+  @override
+  _MeasureSizeState createState() => _MeasureSizeState();
+}
+
+class _MeasureSizeState extends State<_MeasureSize> {
+  @override
+  Widget build(BuildContext context) {
+    SchedulerBinding.instance.addPostFrameCallback(postFrameCallback);
+    return Container(
+      key: widgetKey,
+      child: widget.child,
+    );
+  }
+
+  var widgetKey = GlobalKey();
+  var oldSize;
+
+  void postFrameCallback(_) {
+    var context = widgetKey.currentContext;
+    if (context == null) return;
+
+    var newSize = context.size;
+    if (oldSize == newSize) return;
+
+    oldSize = newSize;
+    widget.onChange(newSize);
+  }
+}
+
+typedef void OnWidgetSizeChange(Size size);
