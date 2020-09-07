@@ -122,14 +122,14 @@ class PlatformButton extends StatelessWidget {
 
 class AppBarAction extends StatelessWidget {
   final VoidCallback onTap;
-  final String iconAsset;
+  final Widget child;
   final EdgeInsets padding;
   final Color color;
 
   const AppBarAction({
     Key key,
     this.onTap,
-    this.iconAsset,
+    this.child,
     this.padding = EdgeInsets.zero,
     this.color = Colors.black,
   }) : super(key: key);
@@ -144,10 +144,7 @@ class AppBarAction extends StatelessWidget {
       child: Padding(
         padding: padding,
         child: Center(
-          child: Image.asset(
-            iconAsset,
-            color: color,
-          ),
+          child: child,
         ),
       ),
     );

@@ -10,10 +10,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  apn_http: ^1.0.0
-  flutter_sfsymbols: ^1.0.0
+  apn_http: ^1.0.1
+  cupertino_icons: ^1.0.0
   keyboard_visibility: ^0.5.6
   app_settings: ^4.0.3
+  flare_flutter: ^2.0.6
   intl:
 
 dev_dependencies:

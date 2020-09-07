@@ -28,9 +28,16 @@ packages:
       name: apn_state
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.6"
-  app_settings:
+    version: "1.2.7"
+  apn_widgets:
     dependency: "direct main"
+    description:
+      path: ".."
+      relative: true
+    source: path
+    version: "1.0.2"
+  app_settings:
+    dependency: transitive
     description:
       name: app_settings
       url: "https://pub.dartlang.org"
@@ -184,7 +191,7 @@ packages:
     source: hosted
     version: "2.3.4"
   flare_flutter:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: flare_flutter
       url: "https://pub.dartlang.org"
@@ -229,7 +236,7 @@ packages:
     source: hosted
     version: "3.1.4"
   intl:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: intl
       url: "https://pub.dartlang.org"
@@ -257,7 +264,7 @@ packages:
     source: hosted
     version: "3.4.1"
   keyboard_visibility:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: keyboard_visibility
       url: "https://pub.dartlang.org"

@@ -1,6 +1,7 @@
+import 'package:apn_widgets/apn_widgets.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_sfsymbols/flutter_sfsymbols.dart';
 
 class SearchBar extends StatefulWidget {
   const SearchBar({
@@ -11,12 +12,18 @@ class SearchBar extends StatefulWidget {
     this.hintText,
     this.hintStyle,
     this.padding,
+    this.prefixIcon,
+    this.suffixIcon,
+    this.suffixIconColor,
   }) : super(key: key);
 
   final TextEditingController controller;
   final ValueChanged<String> onFieldSubmitted;
   final VoidCallback onSearchCleared;
   final String hintText;
+  final String prefixIcon;
+  final String suffixIcon;
+  final Color suffixIconColor;
   final TextStyle hintStyle;
   final EdgeInsets padding;
 
@@ -25,14 +32,14 @@ class SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
-  bool showClearIcon = false;
+  bool showSuffixIcon = false;
 
   @override
   void initState() {
     super.initState();
 
     widget.controller.addListener(() {
-      setState(() => showClearIcon = widget.controller.text.isNotEmpty);
+      setState(() => showSuffixIcon = widget.controller.text.isNotEmpty);
     });
   }
 
@@ -45,7 +52,7 @@ class _SearchBarState extends State<SearchBar> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Image.asset('lib/assets/ic_search.png', package: 'apn_widgets'),
+          Image.asset(widget.prefixIcon ?? 'lib/assets/ic_search.png', package: 'apn_widgets'),
           SizedBox(width: 15.0),
           Expanded(
             child: TextFormField(
@@ -55,6 +62,7 @@ class _SearchBarState extends State<SearchBar> {
                 enabledBorder: InputBorder.none,
                 errorBorder: InputBorder.none,
                 disabledBorder: InputBorder.none,
+                isCollapsed: true,
                 hintText: widget.hintText,
                 hintStyle: widget.hintStyle ??
                     TextStyle(
@@ -62,19 +70,6 @@ class _SearchBarState extends State<SearchBar> {
                       color: Colors.grey[200],
                       fontWeight: FontWeight.w600,
                     ),
-                suffixIcon: showClearIcon
-                    ? Padding(
-                        padding: const EdgeInsets.only(right: 16.0),
-                        child: IconButton(
-                          onPressed: widget.onSearchCleared,
-                          icon: Icon(
-                              Theme.of(context).platform == TargetPlatform.iOS
-                                  ? SFSymbols.xmark_circle_fill
-                                  : Icons.clear,
-                              color: Colors.grey[200]),
-                        ),
-                      )
-                    : null,
               ),
               cursorColor: Colors.blueAccent,
               style: TextStyle(
@@ -87,6 +82,20 @@ class _SearchBarState extends State<SearchBar> {
               onFieldSubmitted: widget.onFieldSubmitted,
             ),
           ),
+          SizedBox(
+            width: 5,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: PlatformButton(
+              onTap: widget.onSearchCleared,
+              color: Colors.transparent,
+              child: Icon(
+                Theme.of(context).platform == TargetPlatform.iOS ? CupertinoIcons.clear_circled_solid : Icons.clear,
+                color: widget.suffixIconColor ?? Colors.black,
+              ),
+            ),
+          )
         ],
       ),
     );

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'extensions.dart';
 
 class MessagePlaceholder extends StatelessWidget {
-  final String message;
+  final Text child;
 
-  const MessagePlaceholder({Key key, @required this.message}) : super(key: key);
+  const MessagePlaceholder({Key key, @required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,14 +14,7 @@ class MessagePlaceholder extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Center(
-            child: Text(
-              message,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Theme.of(context).accentColor.lighten(0.5),
-                fontSize: 16,
-              ),
-            ),
+            child: child
           ),
         ),
       ),

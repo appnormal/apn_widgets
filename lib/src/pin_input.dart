@@ -7,18 +7,17 @@ const _kPlaceholder = '';
 class PinInput extends StatefulWidget {
   final double height;
   final double spaceBetween;
-  final int numInputs;
   final TextEditingController controller;
   final FocusNode focusNode;
   final VoidCallback onCodeCompleted;
   final bool hasError;
   final ValueChanged<String> onChanged;
   final PinFieldBuilder pinFieldBuilder;
+  final bool showKeyboard;
 
   PinInput({
     Key key,
     this.height = 56,
-    this.numInputs = 4,
     this.hasError = false,
     this.spaceBetween = 4,
     @required this.controller,
@@ -26,6 +25,7 @@ class PinInput extends StatefulWidget {
     @required this.pinFieldBuilder,
     this.onCodeCompleted,
     this.onChanged,
+    this.showKeyboard = true,
   }) : super(key: key);
 
   @override
@@ -94,6 +94,7 @@ class _PinInputState extends State<PinInput> {
             width: 0,
             height: 0,
             child: TextFormField(
+              readOnly: !widget.showKeyboard,
               keyboardType: TextInputType.number,
               autocorrect: false,
               focusNode: widget.focusNode,
