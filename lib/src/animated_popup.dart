@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -62,12 +63,12 @@ class _AnimatedPopupState extends State<_AnimatedPopup> {
   Widget build(BuildContext context) {
     const _iconSize = 130.0;
 
-    if (widget.statusbarBrightness == Brightness.light && Theme.of(context).platform == TargetPlatform.iOS) {
-      // For Android.
-      // Use [light] for white status bar and [dark] for black status bar.
+    // For Android.
+    // Use [light] for white status bar and [dark] for black status bar.
 
-      // For iOS.
-      // Use [dark] for white status bar and [light] for black status bar.
+    // For iOS.
+    // Use [dark] for white status bar and [light] for black status bar.
+    if (widget.statusbarBrightness == Brightness.light && Theme.of(context).platform == TargetPlatform.iOS) {
       statusBarBrightness = Brightness.dark;
     } else if (widget.statusbarBrightness == Brightness.dark && Theme.of(context).platform == TargetPlatform.iOS) {
       statusBarBrightness = Brightness.light;
@@ -153,8 +154,8 @@ class _AnimatedPopupState extends State<_AnimatedPopup> {
   }
 }
 
-class FadeUpwardsPageRoute<T> extends MaterialPageRoute<T> {
-  FadeUpwardsPageRoute({
+class _FadeUpwardsPageRoute<T> extends MaterialPageRoute<T> {
+  _FadeUpwardsPageRoute({
     @required WidgetBuilder builder,
     RouteSettings settings,
     bool maintainState = true,
@@ -198,7 +199,7 @@ Future<void> showAnimatedPopup(
 }) {
   return Navigator.push(
       context,
-      FadeUpwardsPageRoute(
+      _FadeUpwardsPageRoute(
         builder: (_) => _AnimatedPopup(
           title: title,
           message: message,
@@ -214,3 +215,24 @@ Future<void> showAnimatedPopup(
         fullscreenDialog: true,
       ));
 }
+
+Future<void> showSuccessPopup(
+  BuildContext context, {
+  @required String title,
+  @required String message,
+  Color backgroundColor,
+  String backgroundImage,
+  TextStyle titleStyle,
+  TextStyle messageStyle,
+}) =>
+    showAnimatedPopup(
+      context,
+      title: title,
+      message: message,
+      backgroundColor: backgroundColor,
+      backgroundImage: backgroundImage,
+      animation: 'packages/apn_widgets/lib/assets/animations/success_check.flr',
+      animationName: 'activate',
+      titleStyle: titleStyle,
+      messageStyle: messageStyle,
+    );

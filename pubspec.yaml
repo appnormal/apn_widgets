@@ -11,6 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   apn_http: ^1.0.1
+  apn_analytics: ^1.0.1
   cupertino_icons: ^1.0.0
   keyboard_visibility: ^0.5.6
   app_settings: ^4.0.3
@@ -24,6 +25,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - lib/assets/animations/
     - lib/assets/
     - lib/assets/2.0x/
     - lib/assets/3.0x/

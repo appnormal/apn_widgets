@@ -13,10 +13,8 @@ class ButtonsPage extends StatelessWidget {
         actions: [
           AppBarAction(
             onTap: () {},
-            child: Image.asset(
-              'lib/assets/check_mark.png',
-              color: Colors.white,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: 12),
+            child: Icon(Icons.check, color: Colors.white),
           )
         ],
       ),
@@ -24,27 +22,42 @@ class ButtonsPage extends StatelessWidget {
   }
 }
 
-class _ButtonsPageBody extends StatelessWidget {
+class _ButtonsPageBody extends StatefulWidget {
+  @override
+  __ButtonsPageBodyState createState() => __ButtonsPageBodyState();
+}
+
+class __ButtonsPageBodyState extends State<_ButtonsPageBody> {
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          PrimaryButton(
-            title: 'This is a primary button',
-            onPressed: () {},
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          PlatformButton(
-            child: Text(
-              'This is a platform button',
+      child: Container(
+        constraints: BoxConstraints(maxWidth: 250),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            PrimaryButton(
+              loading: isLoading,
+              title: 'This is a primary button',
+              onPressed: () {
+                setState(() => isLoading = true);
+
+                Future.delayed(Duration(seconds: 2)).then((value) => setState(() => isLoading = false));
+              },
             ),
-            onTap: () {},
-          )
-        ],
+            SizedBox(
+              height: 5,
+            ),
+            PlatformButton(
+              child: Text(
+                'This is a platform button',
+              ),
+              onTap: () {},
+            )
+          ],
+        ),
       ),
     );
   }
