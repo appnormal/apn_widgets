@@ -13,7 +13,8 @@ class PinInput extends StatefulWidget {
   final bool hasError;
   final ValueChanged<String> onChanged;
   final PinFieldBuilder pinFieldBuilder;
-  final bool showKeyboard;
+
+  bool get showKeyboard => focusNode != null;
 
   PinInput({
     Key key,
@@ -21,11 +22,10 @@ class PinInput extends StatefulWidget {
     this.hasError = false,
     this.spaceBetween = 4,
     @required this.controller,
-    @required this.focusNode,
     @required this.pinFieldBuilder,
+    this.focusNode,
     this.onCodeCompleted,
     this.onChanged,
-    this.showKeyboard = true,
   }) : super(key: key);
 
   @override
@@ -50,7 +50,7 @@ class _PinInputState extends State<PinInput> {
     /// we un-focus. So we can refocus in the onTap
     KeyboardVisibilityNotification().addNewListener(
       onChange: (visible) {
-        if (!visible) widget.focusNode.unfocus();
+        if (!visible) widget.focusNode?.unfocus();
       },
     );
   }
@@ -58,7 +58,7 @@ class _PinInputState extends State<PinInput> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => widget.focusNode.requestFocus(),
+      onTap: () => widget.focusNode?.requestFocus(),
       child: Row(
         children: [
           widget.pinFieldBuilder(PinFieldData(
@@ -114,7 +114,7 @@ class _PinInputState extends State<PinInput> {
   }
 
   bool _isFieldFocused(int index) {
-    if (!widget.focusNode.hasFocus) return false;
+    if (widget.focusNode != null && !widget.focusNode.hasFocus) return false;
 
     var filledValues = 0;
     if (value1 != _kPlaceholder) filledValues++;

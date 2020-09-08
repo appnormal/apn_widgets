@@ -6,31 +6,126 @@ class PinPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      child: _PinPageBody(),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            FlatButton(
+                child: Text('With Keyboard'),
+                onPressed: () =>
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => _PinPageKeyboardBody()))),
+            FlatButton(
+                child: Text('With custom input'),
+                onPressed: () =>
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => _PinPageCustomBody()))),
+          ],
+        ),
+      ),
       title: 'Pin Page',
     );
   }
 }
 
-class _PinPageBody extends StatelessWidget {
+class _PinPageKeyboardBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextEditingController controller = TextEditingController();
     final FocusNode focusNode = FocusNode();
-    return PinInput(
-      showKeyboard: false,
-      onCodeCompleted: () => {},
-      onChanged: (_) => {},
-      spaceBetween: 10,
-      pinFieldBuilder: (PinFieldData data) {
-        return _PinField(
-          height: data.height,
-          value: data.value,
-          isFocused: data.isFocussed,
-        );
-      },
-      controller: controller,
-      focusNode: focusNode,
+    return ExamplePage(
+      title: 'Pin with keyboard',
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: PinInput(
+          controller: controller,
+          spaceBetween: 10,
+          focusNode: focusNode,
+          hasError: false,
+          onCodeCompleted: () {},
+          onChanged: (_) {},
+          pinFieldBuilder: (data) =>
+              _PinField(height: data.height, value: data.value, isFocused: data.isFocussed, hasError: false),
+        ),
+      ),
+    );
+  }
+}
+
+class _PinPageCustomBody extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final TextEditingController controller = TextEditingController();
+    return ExamplePage(
+      title: 'Pin with custom input',
+      child: Column(
+        children: [
+          PinInput(
+            controller: controller,
+            spaceBetween: 10,
+            hasError: false,
+            pinFieldBuilder: (data) =>
+                _PinField(height: data.height, value: data.value, isFocused: data.isFocussed, hasError: false),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Expanded(
+            child: GridView.builder(
+                itemCount: 12,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+                itemBuilder: (BuildContext context, int index) {
+                  if (index == 9) return Container();
+                  if (index == 11)
+                    return _DeleteButton(
+                      onDeleteTapped: () {
+                        if (controller.text.length > 0) {
+                          var pinValues = controller.text.substring(0, controller.text.length - 1);
+                          controller.text = pinValues;
+                        }
+                      },
+                    );
+                  return _CustomInput(
+                    value: index + 1,
+                    onButtonTapped: (index) => {
+                      if (controller.text.length < 4) {controller.text = '${controller.text}$index'}
+                    },
+                  );
+                }),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class _DeleteButton extends StatelessWidget {
+  final VoidCallback onDeleteTapped;
+
+  const _DeleteButton({Key key, this.onDeleteTapped}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FlatButton(
+      onPressed: onDeleteTapped,
+      child: Text('DEL'),
+    );
+  }
+}
+
+class _CustomInput extends StatelessWidget {
+  final int value;
+  final ValueSetter<int> onButtonTapped;
+
+  const _CustomInput({
+    Key key,
+    this.value,
+    this.onButtonTapped,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FlatButton(
+      child: Text('${value}'),
+      onPressed: () => onButtonTapped(value),
     );
   }
 }
