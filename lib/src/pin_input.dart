@@ -1,3 +1,4 @@
+import 'package:apn_widgets/apn_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
@@ -154,3 +155,82 @@ class PinFieldData {
 }
 
 typedef PinFieldBuilder = Widget Function(PinFieldData data);
+
+class PageInputKeyboard extends StatelessWidget {
+  final Widget deleteButton;
+  final Widget leftAction;
+  final double height;
+  final double spaceBetween;
+  final double keyboardSpacing;
+  final TextEditingController controller;
+  final FocusNode focusNode;
+  final VoidCallback onCodeCompleted;
+  final bool hasError;
+  final ValueChanged<String> onChanged;
+  final PinFieldBuilder pinFieldBuilder;
+  final DigitBuilder digitBuilder;
+
+  const PageInputKeyboard({
+    Key key,
+    @required this.digitBuilder,
+    this.height,
+    this.spaceBetween,
+    this.controller,
+    this.focusNode,
+    this.onCodeCompleted,
+    this.hasError,
+    this.onChanged,
+    this.pinFieldBuilder,
+    this.leftAction,
+    this.deleteButton,
+    this.keyboardSpacing = 10,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        PinInput(
+            controller: controller, spaceBetween: spaceBetween, hasError: hasError, pinFieldBuilder: pinFieldBuilder),
+        SizedBox(
+          height: keyboardSpacing,
+        ),
+        Expanded(
+          child: GridView.builder(
+              itemCount: 12,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+              itemBuilder: (BuildContext context, int index) {
+                final digit = index + 1;
+                if (index == 9) return leftAction ?? Container();
+                if (index == 11)
+                  return deleteButton != null
+                      ? TappableOverlay(
+                          onTap: () {
+                            if (controller.text.length > 0) {
+                              var pinValues = controller.text.substring(0, controller.text.length - 1);
+                              controller.text = pinValues;
+                            }
+                          },
+                          child: deleteButton,
+                        )
+                      : Container();
+                return TappableOverlay(
+                  onTap: () => {
+                    if (controller.text.length < 4) {controller.text = '${controller.text}$digit'}
+                  },
+                  child: digitBuilder(DigitData(digit: digit)),
+                );
+              }),
+        )
+      ],
+    );
+  }
+}
+
+typedef DigitBuilder = Widget Function(DigitData data);
+
+class DigitData {
+  final int digit;
+
+  DigitData({this.digit});
+}

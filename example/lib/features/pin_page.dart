@@ -56,42 +56,15 @@ class _PinPageCustomBody extends StatelessWidget {
     final TextEditingController controller = TextEditingController();
     return ExamplePage(
       title: 'Pin with custom input',
-      child: Column(
-        children: [
-          PinInput(
-            controller: controller,
-            spaceBetween: 10,
-            hasError: false,
-            pinFieldBuilder: (data) =>
-                _PinField(height: data.height, value: data.value, isFocused: data.isFocussed, hasError: false),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Expanded(
-            child: GridView.builder(
-                itemCount: 12,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-                itemBuilder: (BuildContext context, int index) {
-                  if (index == 9) return Container();
-                  if (index == 11)
-                    return _DeleteButton(
-                      onDeleteTapped: () {
-                        if (controller.text.length > 0) {
-                          var pinValues = controller.text.substring(0, controller.text.length - 1);
-                          controller.text = pinValues;
-                        }
-                      },
-                    );
-                  return _CustomInput(
-                    value: index + 1,
-                    onButtonTapped: (index) => {
-                      if (controller.text.length < 4) {controller.text = '${controller.text}$index'}
-                    },
-                  );
-                }),
-          )
-        ],
+      child: PageInputKeyboard(
+        controller: controller,
+        keyboardSpacing: 20,
+        spaceBetween: 10,
+        hasError: false,
+        deleteButton: _DeleteButton(),
+        pinFieldBuilder: (data) =>
+            _PinField(height: data.height, value: data.value, isFocused: data.isFocussed, hasError: false),
+        digitBuilder: (DigitData data) => _CustomInput(value: data.digit),
       ),
     );
   }
@@ -104,8 +77,7 @@ class _DeleteButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      onPressed: onDeleteTapped,
+    return Center(
       child: Text('DEL'),
     );
   }
@@ -113,19 +85,16 @@ class _DeleteButton extends StatelessWidget {
 
 class _CustomInput extends StatelessWidget {
   final int value;
-  final ValueSetter<int> onButtonTapped;
 
   const _CustomInput({
     Key key,
     this.value,
-    this.onButtonTapped,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      child: Text('${value}'),
-      onPressed: () => onButtonTapped(value),
+    return Center(
+      child: Text('$value'),
     );
   }
 }
