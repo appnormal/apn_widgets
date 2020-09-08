@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:apn_widgets/apn_widgets.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,29 +8,31 @@ import 'package:flutter/services.dart';
 class _AnimatedPopup extends StatefulWidget {
   final String title;
   final String message;
-  final Widget button;
-  final Color backgroundColor;
-  final String backgroundImage;
   final String animation;
   final String animationName;
+  final Widget button;
   final TextStyle titleStyle;
   final TextStyle messageStyle;
   final Duration timerDuration;
-  final Brightness statusbarBrightness;
+  final Brightness statusBarBrightness;
+  final BoxDecoration decoration;
+  final double iconSize;
+  final double iconSpacing;
 
   const _AnimatedPopup({
     Key key,
     @required this.title,
     @required this.message,
+    @required this.decoration,
     this.button,
-    this.backgroundColor,
-    this.backgroundImage,
     this.animation,
     this.animationName,
     this.titleStyle,
     this.messageStyle,
     this.timerDuration,
-    this.statusbarBrightness = Brightness.light,
+    this.statusBarBrightness = Brightness.light,
+    this.iconSize = 130,
+    this.iconSpacing = 30,
   }) : super(key: key);
 
   @override
@@ -48,8 +51,6 @@ class _AnimatedPopupState extends State<_AnimatedPopup> {
       final duration = widget.timerDuration ?? Duration(seconds: 2);
       timer = Timer(duration, () => Navigator.of(context).pop());
     }
-
-    statusBarBrightness = widget.statusbarBrightness ?? Brightness.light;
   }
 
   @override
@@ -61,44 +62,21 @@ class _AnimatedPopupState extends State<_AnimatedPopup> {
 
   @override
   Widget build(BuildContext context) {
-    const _iconSize = 130.0;
-
-    // For Android.
-    // Use [light] for white status bar and [dark] for black status bar.
-
-    // For iOS.
-    // Use [dark] for white status bar and [light] for black status bar.
-    if (widget.statusbarBrightness == Brightness.light && Theme.of(context).platform == TargetPlatform.iOS) {
-      statusBarBrightness = Brightness.dark;
-    } else if (widget.statusbarBrightness == Brightness.dark && Theme.of(context).platform == TargetPlatform.iOS) {
-      statusBarBrightness = Brightness.light;
-    }
-
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle(
-        statusBarIconBrightness: statusBarBrightness,
-        statusBarBrightness: statusBarBrightness,
-      ),
+    return StatusBarBrightness(
+      statusBarBrightness: statusBarBrightness,
       child: Scaffold(
         body: Container(
-          decoration: BoxDecoration(
-              color: widget.backgroundColor ?? Colors.white,
-              image: widget.backgroundImage != null
-                  ? DecorationImage(
-                      image: AssetImage(widget.backgroundImage),
-                      fit: BoxFit.cover,
-                    )
-                  : null),
-          child: Stack(
-            fit: StackFit.expand,
-            clipBehavior: Clip.antiAlias,
-            children: [
-              SafeArea(
-                child: Column(
+          decoration: widget.decoration,
+          child: SafeArea(
+            child: Stack(
+              fit: StackFit.expand,
+              clipBehavior: Clip.antiAlias,
+              children: [
+                Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     ConstrainedBox(
-                      constraints: BoxConstraints(maxHeight: _iconSize),
+                      constraints: BoxConstraints(maxHeight: widget.iconSize),
                       child: widget.animation != null
                           ? FlareActor(
                               widget.animation,
@@ -121,7 +99,7 @@ class _AnimatedPopupState extends State<_AnimatedPopup> {
                                     fontSize: 30,
                                   ),
                             ),
-                            SizedBox(height: 30),
+                            SizedBox(height: widget.iconSpacing),
                             Text(
                               widget.message,
                               textAlign: TextAlign.center,
@@ -137,16 +115,16 @@ class _AnimatedPopupState extends State<_AnimatedPopup> {
                         ),
                       ),
                     ),
-                    if (widget.button != null) ...[
-                      Expanded(
-                        child: Container(),
-                      ),
-                      widget.button
-                    ]
                   ],
                 ),
-              ),
-            ],
+                if (widget.button != null)
+                  Positioned(
+                      child: Align(
+                    alignment: FractionalOffset.bottomCenter,
+                    child: widget.button,
+                  )),
+              ],
+            ),
           ),
         ),
       ),
@@ -188,14 +166,16 @@ Future<void> showAnimatedPopup(
   BuildContext context, {
   @required String title,
   @required String message,
-  Widget button,
-  Color backgroundColor,
-  String backgroundImage,
+  @required BoxDecoration decoration,
   String animation,
   String animationName,
+  Widget button,
   TextStyle titleStyle,
   TextStyle messageStyle,
   Duration timerDuration,
+  Brightness statusBarBrightness,
+  double iconSize,
+  double iconSpacing,
 }) {
   return Navigator.push(
       context,
@@ -204,13 +184,15 @@ Future<void> showAnimatedPopup(
           title: title,
           message: message,
           button: button,
-          backgroundColor: backgroundColor,
-          backgroundImage: backgroundImage,
           animation: animation,
           animationName: animationName,
           titleStyle: titleStyle,
           messageStyle: messageStyle,
           timerDuration: timerDuration,
+          decoration: decoration,
+          statusBarBrightness: statusBarBrightness,
+          iconSize: iconSize,
+          iconSpacing: iconSpacing,
         ),
         fullscreenDialog: true,
       ));
@@ -220,19 +202,21 @@ Future<void> showSuccessPopup(
   BuildContext context, {
   @required String title,
   @required String message,
-  Color backgroundColor,
-  String backgroundImage,
+  @required BoxDecoration decoration,
   TextStyle titleStyle,
   TextStyle messageStyle,
+  Brightness statusBarBrightness,
+  double iconSize,
+  double iconSpacing,
 }) =>
-    showAnimatedPopup(
-      context,
-      title: title,
-      message: message,
-      backgroundColor: backgroundColor,
-      backgroundImage: backgroundImage,
-      animation: 'packages/apn_widgets/lib/assets/animations/success_check.flr',
-      animationName: 'activate',
-      titleStyle: titleStyle,
-      messageStyle: messageStyle,
-    );
+    showAnimatedPopup(context,
+        title: title,
+        message: message,
+        decoration: decoration,
+        animation: 'packages/apn_widgets/lib/assets/animations/success_check.flr',
+        animationName: 'activate',
+        titleStyle: titleStyle,
+        messageStyle: messageStyle,
+        statusBarBrightness: statusBarBrightness,
+        iconSize: iconSize,
+        iconSpacing: iconSpacing);

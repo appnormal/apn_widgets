@@ -23,13 +23,13 @@ class _AnimatedPopupBody extends StatelessWidget {
             context,
             title: 'This is a title',
             message: 'This is an animated popup',
-            backgroundColor: Colors.red,
             animation: 'lib/assets/error_animation.flr',
             animationName: 'Error',
             button: PlatformButton(
               onTap: () => Navigator.of(context).pop(),
               child: Text('Button'),
             ),
+            decoration: BoxDecoration(color: Colors.red),
           ),
         ),
         SizedBox(height: 10),
@@ -39,7 +39,16 @@ class _AnimatedPopupBody extends StatelessWidget {
             context,
             title: 'This is a title',
             message: 'This is an animated popup',
-            backgroundColor: Colors.red,
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Colors.red,
+                Colors.white,
+                Colors.blue,
+              ],
+            )),
           ),
         ),
         SizedBox(height: 10)
