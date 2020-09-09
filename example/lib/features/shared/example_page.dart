@@ -15,9 +15,7 @@ class ExamplePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar ??  AppBar(
-        title: Text(title),
-      ),
+      appBar: appBar ?? AppBar(title: Text(title)),
       body: child,
     );
   }

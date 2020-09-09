@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:apn_widgets/apn_widgets.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class _AnimatedPopup extends StatefulWidget {
   final String title;
@@ -14,10 +13,8 @@ class _AnimatedPopup extends StatefulWidget {
   final TextStyle titleStyle;
   final TextStyle messageStyle;
   final Duration timerDuration;
-  final Brightness statusBarBrightness;
+  final IconColor statusbarIconColor;
   final BoxDecoration decoration;
-  final double iconSize;
-  final double iconSpacing;
 
   const _AnimatedPopup({
     Key key,
@@ -30,9 +27,7 @@ class _AnimatedPopup extends StatefulWidget {
     this.titleStyle,
     this.messageStyle,
     this.timerDuration,
-    this.statusBarBrightness = Brightness.light,
-    this.iconSize = 130,
-    this.iconSpacing = 30,
+    this.statusbarIconColor,
   }) : super(key: key);
 
   @override
@@ -41,7 +36,6 @@ class _AnimatedPopup extends StatefulWidget {
 
 class _AnimatedPopupState extends State<_AnimatedPopup> {
   Timer timer;
-  Brightness statusBarBrightness;
 
   @override
   void initState() {
@@ -62,21 +56,19 @@ class _AnimatedPopupState extends State<_AnimatedPopup> {
 
   @override
   Widget build(BuildContext context) {
-    return StatusBarBrightness(
-      statusBarBrightness: statusBarBrightness,
+    return StatusbarColor(
+      iconColor: widget.statusbarIconColor,
       child: Scaffold(
         body: Container(
           decoration: widget.decoration,
           child: SafeArea(
-            child: Stack(
-              fit: StackFit.expand,
-              clipBehavior: Clip.antiAlias,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    ConstrainedBox(
-                      constraints: BoxConstraints(maxHeight: widget.iconSize),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxHeight: 150),
                       child: widget.animation != null
                           ? FlareActor(
                               widget.animation,
@@ -84,45 +76,47 @@ class _AnimatedPopupState extends State<_AnimatedPopup> {
                             )
                           : Container(),
                     ),
-                    Center(
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(maxWidth: 280),
-                        child: Column(
-                          children: [
-                            Text(
-                              widget.title,
-                              textAlign: TextAlign.center,
-                              style: widget.titleStyle ??
-                                  TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 30,
-                                  ),
-                            ),
-                            SizedBox(height: widget.iconSpacing),
-                            Text(
-                              widget.message,
-                              textAlign: TextAlign.center,
-                              style: widget.messageStyle ??
-                                  TextStyle(
-                                    height: 2,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 15,
-                                  ),
-                            )
-                          ],
-                        ),
+                  ),
+                ),
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      constraints: BoxConstraints(maxWidth: 280),
+                      child: Column(
+                        children: [
+                          Text(
+                            widget.title,
+                            textAlign: TextAlign.center,
+                            style: widget.titleStyle ??
+                                TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30,
+                                ),
+                          ),
+                          Text(
+                            widget.message,
+                            textAlign: TextAlign.center,
+                            style: widget.messageStyle ??
+                                TextStyle(
+                                  height: 2,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 15,
+                                ),
+                          )
+                        ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
                 if (widget.button != null)
                   Positioned(
-                      child: Align(
-                    alignment: FractionalOffset.bottomCenter,
-                    child: widget.button,
-                  )),
+                    child: Align(
+                      alignment: FractionalOffset.bottomCenter,
+                      child: widget.button,
+                    ),
+                  ),
               ],
             ),
           ),
@@ -162,38 +156,31 @@ class _FadeUpwardsPageRoute<T> extends MaterialPageRoute<T> {
   }
 }
 
-Future<void> showAnimatedPopup(
-  BuildContext context, {
-  @required String title,
-  @required String message,
-  @required BoxDecoration decoration,
-  String animation,
-  String animationName,
-  Widget button,
-  TextStyle titleStyle,
-  TextStyle messageStyle,
-  Duration timerDuration,
-  Brightness statusBarBrightness,
-  double iconSize,
-  double iconSpacing,
-}) {
+Future<void> showAnimatedPopup(BuildContext context,
+    {@required String title,
+    @required String message,
+    @required BoxDecoration decoration,
+    String animation,
+    String animationName,
+    Widget button,
+    TextStyle titleStyle,
+    TextStyle messageStyle,
+    Duration timerDuration,
+    IconColor statusbarIconColor}) {
   return Navigator.push(
       context,
       _FadeUpwardsPageRoute(
         builder: (_) => _AnimatedPopup(
-          title: title,
-          message: message,
-          button: button,
-          animation: animation,
-          animationName: animationName,
-          titleStyle: titleStyle,
-          messageStyle: messageStyle,
-          timerDuration: timerDuration,
-          decoration: decoration,
-          statusBarBrightness: statusBarBrightness,
-          iconSize: iconSize,
-          iconSpacing: iconSpacing,
-        ),
+            title: title,
+            message: message,
+            button: button,
+            animation: animation,
+            animationName: animationName,
+            titleStyle: titleStyle,
+            messageStyle: messageStyle,
+            timerDuration: timerDuration,
+            decoration: decoration,
+            statusbarIconColor: statusbarIconColor),
         fullscreenDialog: true,
       ));
 }
@@ -205,18 +192,16 @@ Future<void> showSuccessPopup(
   @required BoxDecoration decoration,
   TextStyle titleStyle,
   TextStyle messageStyle,
-  Brightness statusBarBrightness,
-  double iconSize,
-  double iconSpacing,
+  IconColor statusbarIconColor,
 }) =>
-    showAnimatedPopup(context,
-        title: title,
-        message: message,
-        decoration: decoration,
-        animation: 'packages/apn_widgets/lib/assets/animations/success_check.flr',
-        animationName: 'activate',
-        titleStyle: titleStyle,
-        messageStyle: messageStyle,
-        statusBarBrightness: statusBarBrightness,
-        iconSize: iconSize,
-        iconSpacing: iconSpacing);
+    showAnimatedPopup(
+      context,
+      title: title,
+      message: message,
+      decoration: decoration,
+      animation: 'packages/apn_widgets/lib/assets/animations/success_check.flr',
+      animationName: 'activate',
+      titleStyle: titleStyle,
+      messageStyle: messageStyle,
+      statusbarIconColor: statusbarIconColor,
+    );

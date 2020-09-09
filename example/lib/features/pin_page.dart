@@ -42,8 +42,12 @@ class _PinPageKeyboardBody extends StatelessWidget {
           hasError: false,
           onCodeCompleted: () {},
           onChanged: (_) {},
-          pinFieldBuilder: (data) =>
-              _PinField(height: data.height, value: data.value, isFocused: data.isFocussed, hasError: false),
+          pinFieldBuilder: (data) => _PinField(
+            height: data.height,
+            value: data.value,
+            isFocused: data.isFocussed,
+            hasError: false,
+          ),
         ),
       ),
     );
@@ -55,18 +59,31 @@ class _PinPageCustomBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextEditingController controller = TextEditingController();
     return ExamplePage(
-      title: 'Pin with custom input',
-      child: PageInputKeyboard(
-        controller: controller,
-        keyboardSpacing: 20,
-        spaceBetween: 10,
-        hasError: false,
-        deleteButton: _DeleteButton(),
-        pinFieldBuilder: (data) =>
-            _PinField(height: data.height, value: data.value, isFocused: data.isFocussed, hasError: false),
-        digitBuilder: (DigitData data) => _CustomInput(value: data.digit),
-      ),
-    );
+        title: 'Pin with custom input',
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(children: [
+            PinInput(
+              controller: controller,
+              spaceBetween: 10,
+              hasError: false,
+              onCodeCompleted: () {},
+              onChanged: (_) {},
+              pinFieldBuilder: (data) => _PinField(
+                height: data.height,
+                value: data.value,
+                isFocused: data.isFocussed,
+                hasError: false,
+              ),
+            ),
+            SizedBox(height: 50),
+            PageInputKeyboard(
+              controller: controller,
+              deleteButton: _DeleteButton(),
+              digitBuilder: (DigitData data) => _CustomInput(value: data.digit),
+            ),
+          ]),
+        ));
   }
 }
 
