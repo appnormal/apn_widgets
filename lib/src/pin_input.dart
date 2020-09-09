@@ -161,6 +161,10 @@ class PageInputKeyboard extends StatelessWidget {
   final Widget deleteButton;
   final Widget leftAction;
   final TextEditingController controller;
+  final double horizontalSpacing;
+  final double verticalSpacing;
+  final ShapeBorder shapeBorder;
+  final double childAspectRatio;
 
   const PageInputKeyboard({
     Key key,
@@ -168,39 +172,82 @@ class PageInputKeyboard extends StatelessWidget {
     @required this.controller,
     this.leftAction,
     this.deleteButton,
+    this.horizontalSpacing = 20,
+    this.verticalSpacing = 20,
+    this.shapeBorder,
+    this.childAspectRatio = 1,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: GridView.builder(
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: 12,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-          itemBuilder: (BuildContext context, int index) {
-            var digit = index + 1;
-            if (index == 9) return leftAction ?? Container();
-            if (index == 10) digit = 0;
-            if (index == 11)
-              return deleteButton != null
-                  ? GestureDetector(
-                      onTap: () {
-                        if (controller.text.length > 0) {
-                          var pinValues = controller.text.substring(0, controller.text.length - 1);
-                          controller.text = pinValues;
-                        }
-                      },
-                      child: deleteButton,
-                    )
-                  : Container();
-            return GestureDetector(
-              onTap: () => {
-                if (controller.text.length < 4) {controller.text = '${controller.text}$digit'}
-              },
-              child: digitBuilder(DigitData(digit: digit)),
-            );
-          }),
+    List<Widget> digitWidgets = [];
+
+    for (var i = 1; i < 13; i++) {
+      digitWidgets.add(TappableOverlay(
+        shape: shapeBorder,
+        onTap: () => {
+          if (controller.text.length < 4) {controller.text = '${controller.text}$i'}
+        },
+        child: digitBuilder(
+          DigitData(digit: i),
+        ),
+      ));
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [digitWidgets[0], digitWidgets[1], digitWidgets[2]].separated(SizedBox(
+            width: horizontalSpacing,
+          )),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [digitWidgets[3], digitWidgets[4], digitWidgets[5]].separated(SizedBox(
+            width: horizontalSpacing,
+          )),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [digitWidgets[6], digitWidgets[7], digitWidgets[8]].separated(SizedBox(
+            width: horizontalSpacing,
+          )),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            leftAction ??
+                Visibility(
+                  maintainSize: true,
+                  maintainState: true,
+                  maintainAnimation: true,
+                  child: digitWidgets[9],
+                  visible: false,
+                ),
+            digitWidgets[10],
+            deleteButton != null
+                ? TappableOverlay(
+                    shape: shapeBorder,
+                    onTap: () {
+                      if (controller.text.length > 0) {
+                        var pinValues = controller.text.substring(0, controller.text.length - 1);
+                        controller.text = pinValues;
+                      }
+                    },
+                    child: Center(child: deleteButton),
+                  )
+                : Container()
+          ].separated(SizedBox(
+            width: horizontalSpacing,
+          )),
+        )
+      ].separated(SizedBox(
+        height: verticalSpacing,
+      )),
     );
+    
   }
 }
 

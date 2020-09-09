@@ -61,7 +61,7 @@ class _PinPageCustomBody extends StatelessWidget {
     return ExamplePage(
         title: 'Pin with custom input',
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(50.0),
           child: Column(children: [
             PinInput(
               controller: controller,
