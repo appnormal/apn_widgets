@@ -82,7 +82,6 @@ class RefreshableDataList<T extends ApiBaseState, V> extends StatelessWidget {
     var refreshablePlaceholder = TappableOverlay(
       onTap: onNextPage,
       child: placeholder,
-      color: Colors.white,
       highlightColor: Color(0xFFD9E5F4),
       pressedColor: Colors.white.withOpacity(0.1),
     );

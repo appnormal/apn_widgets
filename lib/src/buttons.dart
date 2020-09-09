@@ -122,14 +122,14 @@ class PlatformButton extends StatelessWidget {
 
 class AppBarAction extends StatelessWidget {
   final VoidCallback onTap;
-  final String iconAsset;
+  final Widget child;
   final EdgeInsets padding;
   final Color color;
 
   const AppBarAction({
     Key key,
     this.onTap,
-    this.iconAsset,
+    this.child,
     this.padding = EdgeInsets.zero,
     this.color = Colors.black,
   }) : super(key: key);
@@ -137,17 +137,13 @@ class AppBarAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TappableOverlay(
-      color: Colors.white,
       pressedColor: Colors.white,
       highlightColor: Theme.of(context).accentColor.withOpacity(0.2),
       onTap: onTap,
       child: Padding(
         padding: padding,
         child: Center(
-          child: Image.asset(
-            iconAsset,
-            color: color,
-          ),
+          child: child,
         ),
       ),
     );

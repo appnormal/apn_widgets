@@ -28,7 +28,6 @@ class TappableOverlay extends StatefulWidget {
     Key key,
     @required this.child,
     @required this.onTap,
-    Color color,
     this.highlightColor,
     this.pressedColor,
     this.width,

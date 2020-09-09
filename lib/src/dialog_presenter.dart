@@ -33,9 +33,10 @@ class _DialogPresenterState extends State<DialogPresenter> {
   Dialog activeDialog;
   final queue = <Dialog>[];
 
-  String get appName => widget.strings.containsKey(kStringAppName) ? widget.strings[kStringAppName] : 'App';
-  String get ok => widget.strings.containsKey(kStringOK) ? widget.strings[kStringOK] : 'OK';
-  String get settings => widget.strings.containsKey(kStringAppSettings) ? widget.strings[kStringAppSettings] : 'Open settings';
+  bool get hasStrings => widget.strings != null && widget.strings.isNotEmpty;
+  String get appName => hasStrings ? widget.strings.containsKey(kStringAppName) ? widget.strings[kStringAppName] : 'App' : 'App';
+  String get ok => hasStrings ? widget.strings.containsKey(kStringOK) ? widget.strings[kStringOK] : 'OK' : 'OK';
+  String get settings => hasStrings ?  widget.strings.containsKey(kStringAppSettings) ? widget.strings[kStringAppSettings] : 'Open settings' : 'Open settings';
 
   @override
   Widget build(BuildContext context) {

@@ -1,3 +1,4 @@
+import 'package:apn_widgets/apn_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
@@ -7,7 +8,6 @@ const _kPlaceholder = '';
 class PinInput extends StatefulWidget {
   final double height;
   final double spaceBetween;
-  final int numInputs;
   final TextEditingController controller;
   final FocusNode focusNode;
   final VoidCallback onCodeCompleted;
@@ -15,15 +15,16 @@ class PinInput extends StatefulWidget {
   final ValueChanged<String> onChanged;
   final PinFieldBuilder pinFieldBuilder;
 
+  bool get showKeyboard => focusNode != null;
+
   PinInput({
     Key key,
     this.height = 56,
-    this.numInputs = 4,
     this.hasError = false,
     this.spaceBetween = 4,
     @required this.controller,
-    @required this.focusNode,
     @required this.pinFieldBuilder,
+    this.focusNode,
     this.onCodeCompleted,
     this.onChanged,
   }) : super(key: key);
@@ -50,7 +51,7 @@ class _PinInputState extends State<PinInput> {
     /// we un-focus. So we can refocus in the onTap
     KeyboardVisibilityNotification().addNewListener(
       onChange: (visible) {
-        if (!visible) widget.focusNode.unfocus();
+        if (!visible) widget.focusNode?.unfocus();
       },
     );
   }
@@ -58,7 +59,7 @@ class _PinInputState extends State<PinInput> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => widget.focusNode.requestFocus(),
+      onTap: () => widget.focusNode?.requestFocus(),
       child: Row(
         children: [
           widget.pinFieldBuilder(PinFieldData(
@@ -94,6 +95,7 @@ class _PinInputState extends State<PinInput> {
             width: 0,
             height: 0,
             child: TextFormField(
+              readOnly: !widget.showKeyboard,
               keyboardType: TextInputType.number,
               autocorrect: false,
               focusNode: widget.focusNode,
@@ -113,7 +115,7 @@ class _PinInputState extends State<PinInput> {
   }
 
   bool _isFieldFocused(int index) {
-    if (!widget.focusNode.hasFocus) return false;
+    if (widget.focusNode != null && !widget.focusNode.hasFocus) return false;
 
     var filledValues = 0;
     if (value1 != _kPlaceholder) filledValues++;
@@ -153,3 +155,57 @@ class PinFieldData {
 }
 
 typedef PinFieldBuilder = Widget Function(PinFieldData data);
+
+class PageInputKeyboard extends StatelessWidget {
+  final DigitBuilder digitBuilder;
+  final Widget deleteButton;
+  final Widget leftAction;
+  final TextEditingController controller;
+
+  const PageInputKeyboard({
+    Key key,
+    @required this.digitBuilder,
+    @required this.controller,
+    this.leftAction,
+    this.deleteButton,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: GridView.builder(
+          itemCount: 12,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+          itemBuilder: (BuildContext context, int index) {
+            final digit = index + 1;
+            if (index == 9) return leftAction ?? Container();
+            if (index == 11)
+              return deleteButton != null
+                  ? TappableOverlay(
+                      onTap: () {
+                        if (controller.text.length > 0) {
+                          var pinValues = controller.text.substring(0, controller.text.length - 1);
+                          controller.text = pinValues;
+                        }
+                      },
+                      child: deleteButton,
+                    )
+                  : Container();
+            return TappableOverlay(
+              onTap: () => {
+                if (controller.text.length < 4) {controller.text = '${controller.text}$digit'}
+              },
+              child: digitBuilder(DigitData(digit: digit)),
+            );
+          }),
+    );
+  }
+}
+
+typedef DigitBuilder = Widget Function(DigitData data);
+
+class DigitData {
+  final int digit;
+
+  DigitData({this.digit});
+}
