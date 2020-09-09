@@ -174,14 +174,16 @@ class PageInputKeyboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: GridView.builder(
+          physics: NeverScrollableScrollPhysics(),
           itemCount: 12,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
           itemBuilder: (BuildContext context, int index) {
-            final digit = index + 1;
+            var digit = index + 1;
             if (index == 9) return leftAction ?? Container();
+            if (index == 10) digit = 0;
             if (index == 11)
               return deleteButton != null
-                  ? TappableOverlay(
+                  ? GestureDetector(
                       onTap: () {
                         if (controller.text.length > 0) {
                           var pinValues = controller.text.substring(0, controller.text.length - 1);
@@ -191,7 +193,7 @@ class PageInputKeyboard extends StatelessWidget {
                       child: deleteButton,
                     )
                   : Container();
-            return TappableOverlay(
+            return GestureDetector(
               onTap: () => {
                 if (controller.text.length < 4) {controller.text = '${controller.text}$digit'}
               },

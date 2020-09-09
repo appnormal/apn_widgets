@@ -1,4 +1,8 @@
-## [1.0.2] - 6 sept 2020
+## [1.0.3] - 9 sept 2020
+
+* Allow pinfield items to have their own tappable styling
+
+## [1.0.2] - 8 sept 2020
 
 * Update dependency
 * Change TappableOverlay to not render the child twice, but calculate the size of the child after the first frame

@@ -111,7 +111,10 @@ class _CustomInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text('$value'),
+      child: TappableOverlay(
+        onTap: () {},
+        child: Text('$value'),
+      ),
     );
   }
 }
