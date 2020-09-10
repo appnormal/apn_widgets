@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'extensions.dart';
 
 class MessagePlaceholder extends StatelessWidget {
   final Text child;

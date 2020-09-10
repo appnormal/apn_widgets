@@ -40,8 +40,7 @@ class _PinPageKeyboardBody extends StatelessWidget {
           spaceBetween: 10,
           focusNode: focusNode,
           hasError: false,
-          onCodeCompleted: () {},
-          onChanged: (_) {},
+          onCodeCompleted: (pinCode) {},
           pinFieldBuilder: (data) => _PinField(
             height: data.height,
             value: data.value,
@@ -61,14 +60,15 @@ class _PinPageCustomBody extends StatelessWidget {
     return ExamplePage(
         title: 'Pin with custom input',
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(50.0),
           child: Column(children: [
             PinInput(
               controller: controller,
               spaceBetween: 10,
               hasError: false,
-              onCodeCompleted: () {},
-              onChanged: (_) {},
+              //If this is changed also change the value of pageInputKeyboard
+              pinInputsAmount: 5,
+              onCodeCompleted: (pinCode) => {},
               pinFieldBuilder: (data) => _PinField(
                 height: data.height,
                 value: data.value,
@@ -78,6 +78,7 @@ class _PinPageCustomBody extends StatelessWidget {
             ),
             SizedBox(height: 50),
             PageInputKeyboard(
+              pinInputsAmount: 5,
               controller: controller,
               deleteButton: _DeleteButton(),
               digitBuilder: (DigitData data) => _CustomInput(value: data.digit),

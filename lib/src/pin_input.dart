@@ -1,6 +1,5 @@
 import 'package:apn_widgets/apn_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
 
 const _kPlaceholder = '';
@@ -10,12 +9,14 @@ class PinInput extends StatefulWidget {
   final double spaceBetween;
   final TextEditingController controller;
   final FocusNode focusNode;
-  final VoidCallback onCodeCompleted;
+  final ValueSetter<String> onCodeCompleted;
   final bool hasError;
-  final ValueChanged<String> onChanged;
   final PinFieldBuilder pinFieldBuilder;
+  final int pinInputsAmount;
 
   bool get showKeyboard => focusNode != null;
+
+  String get pinCodeValue => controller.text;
 
   PinInput({
     Key key,
@@ -26,7 +27,7 @@ class PinInput extends StatefulWidget {
     @required this.pinFieldBuilder,
     this.focusNode,
     this.onCodeCompleted,
-    this.onChanged,
+    this.pinInputsAmount = 4,
   }) : super(key: key);
 
   @override
@@ -34,10 +35,8 @@ class PinInput extends StatefulWidget {
 }
 
 class _PinInputState extends State<PinInput> {
-  var value1 = _kPlaceholder;
-  var value2 = _kPlaceholder;
-  var value3 = _kPlaceholder;
-  var value4 = _kPlaceholder;
+  var values = Map<int, String>();
+  List<Widget> pinInputs = [];
 
   var previousValue;
 
@@ -54,63 +53,20 @@ class _PinInputState extends State<PinInput> {
         if (!visible) widget.focusNode?.unfocus();
       },
     );
+
+    for (var i = 0; i < widget.pinInputsAmount; i++) {
+      values[i] = _kPlaceholder;
+    }
+
+    _rebuildInputWidgets();
   }
 
   @override
   Widget build(BuildContext context) {
+    _rebuildInputWidgets(shouldResetPinInputs: true);
     return GestureDetector(
       onTap: () => widget.focusNode?.requestFocus(),
-      child: Row(
-        children: [
-          widget.pinFieldBuilder(PinFieldData(
-            height: widget.height,
-            value: value1,
-            isFocussed: _isFieldFocused(0),
-            hasError: widget.hasError,
-          )),
-          SizedBox(width: widget.spaceBetween),
-          widget.pinFieldBuilder(PinFieldData(
-            height: widget.height,
-            value: value2,
-            isFocussed: _isFieldFocused(1),
-            hasError: widget.hasError,
-          )),
-          SizedBox(width: widget.spaceBetween),
-          widget.pinFieldBuilder(PinFieldData(
-            height: widget.height,
-            value: value3,
-            isFocussed: _isFieldFocused(2),
-            hasError: widget.hasError,
-          )),
-          SizedBox(width: widget.spaceBetween),
-          widget.pinFieldBuilder(PinFieldData(
-            height: widget.height,
-            value: value4,
-            isFocussed: _isFieldFocused(3),
-            hasError: widget.hasError,
-          )),
-
-          /// Hidden form field to capture input
-          Container(
-            width: 0,
-            height: 0,
-            child: TextFormField(
-              readOnly: !widget.showKeyboard,
-              keyboardType: TextInputType.number,
-              autocorrect: false,
-              focusNode: widget.focusNode,
-              controller: widget.controller,
-              cursorColor: Colors.transparent,
-              cursorWidth: 0,
-              enableInteractiveSelection: false,
-              inputFormatters: [
-                LengthLimitingTextInputFormatter(4),
-              ],
-              onChanged: widget.onChanged,
-            ),
-          ),
-        ],
-      ),
+      child: Row(children: pinInputs),
     );
   }
 
@@ -118,10 +74,10 @@ class _PinInputState extends State<PinInput> {
     if (widget.focusNode != null && !widget.focusNode.hasFocus) return false;
 
     var filledValues = 0;
-    if (value1 != _kPlaceholder) filledValues++;
-    if (value2 != _kPlaceholder) filledValues++;
-    if (value3 != _kPlaceholder) filledValues++;
-    if (value4 != _kPlaceholder) filledValues++;
+
+    values.forEach((index, value) {
+      if (values[index] != _kPlaceholder) filledValues++;
+    });
 
     return index == filledValues;
   }
@@ -131,17 +87,46 @@ class _PinInputState extends State<PinInput> {
 
     if (mounted) {
       setState(() {
-        value1 = splitted.isNotEmpty ? splitted[0] : _kPlaceholder;
-        value2 = splitted.length > 1 ? splitted[1] : _kPlaceholder;
-        value3 = splitted.length > 2 ? splitted[2] : _kPlaceholder;
-        value4 = splitted.length > 3 ? splitted[3] : _kPlaceholder;
+        //First reset the values map
+        values = Map<int, String>();
+        //Then fill it with placeholders again
+
+        for (var i = 0; i < widget.pinInputsAmount; i++) {
+          values[i] = _kPlaceholder;
+        }
+        //Add all the new values the got
+        splitted.asMap().forEach((index, value) {
+          if (index == 0) values[index] = splitted.isNotEmpty ? splitted[index] : _kPlaceholder;
+          values[index] = splitted.length > index ? splitted[index] : _kPlaceholder;
+        });
+
+        //Finally we'll rebuild the inputs
+        _rebuildInputWidgets(shouldResetPinInputs: true);
       });
     }
 
-    if (widget.onCodeCompleted != null && splitted.length == 4 && value != previousValue) {
-      widget.onCodeCompleted();
+    if (widget.onCodeCompleted != null && splitted.length == widget.pinInputsAmount && value != previousValue) {
+      widget.onCodeCompleted(widget.pinCodeValue);
       previousValue = value;
     }
+  }
+
+  void _rebuildInputWidgets({bool shouldResetPinInputs = false}) {
+    if (shouldResetPinInputs) {
+      setState(() {
+        pinInputs = [];
+      });
+    }
+
+    values.forEach((index, value) {
+      pinInputs.add(widget.pinFieldBuilder(PinFieldData(
+        height: widget.height,
+        value: value,
+        isFocussed: _isFieldFocused(index),
+        hasError: widget.hasError,
+      )));
+    });
+
   }
 }
 
@@ -161,6 +146,11 @@ class PageInputKeyboard extends StatelessWidget {
   final Widget deleteButton;
   final Widget leftAction;
   final TextEditingController controller;
+  final double horizontalSpacing;
+  final double verticalSpacing;
+  final ShapeBorder shapeBorder;
+  final double childAspectRatio;
+  final int pinInputsAmount;
 
   const PageInputKeyboard({
     Key key,
@@ -168,38 +158,85 @@ class PageInputKeyboard extends StatelessWidget {
     @required this.controller,
     this.leftAction,
     this.deleteButton,
+    this.horizontalSpacing = 20,
+    this.verticalSpacing = 20,
+    this.shapeBorder,
+    this.childAspectRatio = 1,
+    this.pinInputsAmount = 4,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: GridView.builder(
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: 12,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-          itemBuilder: (BuildContext context, int index) {
-            var digit = index + 1;
-            if (index == 9) return leftAction ?? Container();
-            if (index == 10) digit = 0;
-            if (index == 11)
-              return deleteButton != null
-                  ? GestureDetector(
-                      onTap: () {
-                        if (controller.text.length > 0) {
-                          var pinValues = controller.text.substring(0, controller.text.length - 1);
-                          controller.text = pinValues;
-                        }
-                      },
-                      child: deleteButton,
-                    )
-                  : Container();
-            return GestureDetector(
-              onTap: () => {
-                if (controller.text.length < 4) {controller.text = '${controller.text}$digit'}
+    List<Widget> digitWidgets = [];
+
+    for (var i = 1; i < 13; i++) {
+      var digit = i;
+      //Make the bottom digit show 0 like on a numpad
+      if (i == 11) digit = 0;
+      digitWidgets.add(TappableOverlay(
+        shape: shapeBorder,
+        onTap: () =>
+        {
+          if (controller.text.length < pinInputsAmount ) {controller.text = '${controller.text}$i'}
+        },
+        child: digitBuilder(
+          DigitData(digit: digit),
+        ),
+      ));
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [digitWidgets[0], digitWidgets[1], digitWidgets[2]].separated(SizedBox(
+            width: horizontalSpacing,
+          )),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [digitWidgets[3], digitWidgets[4], digitWidgets[5]].separated(SizedBox(
+            width: horizontalSpacing,
+          )),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [digitWidgets[6], digitWidgets[7], digitWidgets[8]].separated(SizedBox(
+            width: horizontalSpacing,
+          )),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            leftAction ??
+                Visibility(
+                  maintainSize: true,
+                  maintainState: true,
+                  maintainAnimation: true,
+                  child: digitWidgets[9],
+                  visible: false,
+                ),
+            digitWidgets[10],
+            deleteButton != null
+                ? TappableOverlay(
+              shape: shapeBorder,
+              onTap: () {
+                if (controller.text.length > 0) {
+                  var pinValues = controller.text.substring(0, controller.text.length - 1);
+                  controller.text = pinValues;
+                }
               },
-              child: digitBuilder(DigitData(digit: digit)),
-            );
-          }),
+              child: Center(child: deleteButton),
+            )
+                : Container()
+          ].separated(SizedBox(
+            width: horizontalSpacing,
+          )),
+        )
+      ].separated(SizedBox(
+        height: verticalSpacing,
+      )),
     );
   }
 }

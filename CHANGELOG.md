@@ -1,4 +1,8 @@
-## [1.0.3] - 9 sept 2020
+## [1.0.6] - 10 sept 2020
+
+* Allow for custom amount of pin inputs
+
+## [1.0.5] - 9 sept 2020
 
 * Allow pinfield items to have their own tappable styling
 
