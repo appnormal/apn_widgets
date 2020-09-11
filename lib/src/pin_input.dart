@@ -174,7 +174,7 @@ class PageInputKeyboard extends StatelessWidget {
         shape: shapeBorder,
         onTap: () =>
         {
-          if (controller.text.length < pinInputsAmount ) {controller.text = '${controller.text}$i'}
+          if (controller.text.length < pinInputsAmount ) {controller.text = '${controller.text}$digit'}
         },
         child: digitBuilder(
           DigitData(digit: digit),
