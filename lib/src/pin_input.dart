@@ -38,8 +38,6 @@ class _PinInputState extends State<PinInput> {
   var values = Map<int, String>();
   List<Widget> pinInputs = [];
 
-  var previousValue;
-
   @override
   void initState() {
     super.initState();
@@ -105,9 +103,8 @@ class _PinInputState extends State<PinInput> {
       });
     }
 
-    if (widget.onCodeCompleted != null && splitted.length == widget.pinInputsAmount && value != previousValue) {
+    if (widget.onCodeCompleted != null && splitted.length == widget.pinInputsAmount) {
       widget.onCodeCompleted(widget.pinCodeValue);
-      previousValue = value;
     }
   }
 
@@ -177,7 +174,7 @@ class PageInputKeyboard extends StatelessWidget {
         shape: shapeBorder,
         onTap: () =>
         {
-          if (controller.text.length < pinInputsAmount ) {controller.text = '${controller.text}$i'}
+          if (controller.text.length < pinInputsAmount ) {controller.text = '${controller.text}$digit'}
         },
         child: digitBuilder(
           DigitData(digit: digit),

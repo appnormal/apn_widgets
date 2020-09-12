@@ -1,3 +1,9 @@
+## [1.0.9] - 12 sept 2020
+
+* Add controller override to datalist
+* Make pressed color on tabs more subtle
+* Add tab onTabChanged parameter
+
 ## [1.0.6] - 10 sept 2020
 
 * Allow for custom amount of pin inputs
