@@ -12,6 +12,7 @@ class BaseTabsPage extends StatefulWidget {
     this.tabLabelStyle,
     this.unselectedColor = Colors.black,
     this.selectedColor,
+    this.onTabChanged,
     this.height = kTabHeight,
   });
 
@@ -22,6 +23,7 @@ class BaseTabsPage extends StatefulWidget {
   final TextStyle tabLabelStyle;
   final Color unselectedColor;
   final Color selectedColor;
+  final ValueSetter<int> onTabChanged;
 
   @override
   _BaseTabsPageState createState() => _BaseTabsPageState();
@@ -59,6 +61,7 @@ class _BaseTabsPageState extends State<BaseTabsPage> {
         decoration: widget.decoration,
         onTap: (selectedTab) {
           setState(() => _currentTab = selectedTab);
+          if(widget.onTabChanged != null) widget.onTabChanged(selectedTab);
           _trackCurrentScreen();
         },
         items: _tabContent.asMap().entries.map((entry) {
@@ -119,7 +122,7 @@ class TabBar extends StatelessWidget {
   Widget _selectableTab(BuildContext context, TabBarItem item) {
     return Expanded(
       child: TappableOverlay(
-        highlightColor: Theme.of(context).accentColor.withOpacity(0.3),
+        highlightColor: Theme.of(context).accentColor.withOpacity(0.1),
         pressedColor: Colors.white,
         onTap: () => onTap(item.tabIndex),
         child: Center(child: item),

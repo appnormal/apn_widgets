@@ -8,6 +8,7 @@ import 'package:flutter/widgets.dart';
 /// * Maybe use this to improve further in the future is we want to have more control
 /// * over custom pull to refresh implementations on iOS and Android
 class PlatformPullToRefresh extends StatefulWidget {
+  final ScrollController controller;
   final VoidCallback onRefresh;
   final int itemCount;
   final EdgeInsets padding;
@@ -28,6 +29,7 @@ class PlatformPullToRefresh extends StatefulWidget {
     @required this.onRefresh,
     @required this.itemCount,
     @required this.itemBuilder,
+    this.controller,
     this.separatorBuilder,
     this.onPageEndReached,
     this.scrollEndReachedThreshold = 250,
@@ -45,12 +47,12 @@ class PlatformPullToRefresh extends StatefulWidget {
 }
 
 class _PlatformPullToRefreshState extends State<PlatformPullToRefresh> {
-  ScrollController _scrollController = ScrollController();
+  ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController();
+    _scrollController = widget.controller ?? ScrollController();
 
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
@@ -152,7 +154,7 @@ class _PlatformPullToRefreshState extends State<PlatformPullToRefresh> {
     );
 
     // * wrap the slivers in a scroll view (wrapped in a scrollbar for showing the scroll indicator)
-    customScrollView = CupertinoScrollbar(child: customScrollView);
+    customScrollView = CupertinoScrollbar(child: customScrollView, controller: _scrollController);
 
     return customScrollView;
   }

@@ -55,11 +55,15 @@ class RefreshableDataList<T extends ApiBaseState, V> extends StatelessWidget {
 
   final ValueSetter<ErrorResponse> onError;
 
+  final ScrollController controller;
+  final Color backgroundColor;
+
   const RefreshableDataList({
     Key key,
     @required this.state,
     @required this.itemBuilder,
     this.separatorBuilder,
+    this.controller,
     this.loading,
     this.placeholder,
     this.padding,
@@ -67,6 +71,7 @@ class RefreshableDataList<T extends ApiBaseState, V> extends StatelessWidget {
     this.gridCrossAxisSpacing,
     this.gridMainAxisSpacing,
     this.gridChildAspectRatio,
+    this.backgroundColor,
     this.onError,
   }) : super(key: key);
 
@@ -91,10 +96,12 @@ class RefreshableDataList<T extends ApiBaseState, V> extends StatelessWidget {
       placeholder: refreshablePlaceholder,
       loading: loading,
       isLoading: state.isLoadingFirstData,
+      listBackgroundColor: backgroundColor,
       listBuilder: (items) {
         return PlatformPullToRefresh(
           itemCount: items.length,
           itemBuilder: itemBuilder,
+          controller: controller,
           separatorBuilder: separatorBuilder,
           onRefresh: onNextPage,
           hasMorePages: state.hasMorePages,
