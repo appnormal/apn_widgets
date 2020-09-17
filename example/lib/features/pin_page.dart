@@ -26,18 +26,32 @@ class PinPage extends StatelessWidget {
   }
 }
 
-class _PinPageKeyboardBody extends StatelessWidget {
+class _PinPageKeyboardBody extends StatefulWidget {
+  @override
+  __PinPageKeyboardBodyState createState() => __PinPageKeyboardBodyState();
+}
+
+class __PinPageKeyboardBodyState extends State<_PinPageKeyboardBody> {
+  final TextEditingController controller = TextEditingController();
+  final FocusNode focusNode = FocusNode();
+
+  @override
+  void dispose() {
+    controller.dispose();
+    focusNode.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final TextEditingController controller = TextEditingController();
-    final FocusNode focusNode = FocusNode();
+
     return ExamplePage(
       title: 'Pin with keyboard',
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: PinInput(
           controller: controller,
-          spaceBetween: 10,
+          spaceBetween: 20,
           focusNode: focusNode,
           hasError: false,
           onCodeCompleted: (pinCode) {},
@@ -53,10 +67,22 @@ class _PinPageKeyboardBody extends StatelessWidget {
   }
 }
 
-class _PinPageCustomBody extends StatelessWidget {
+class _PinPageCustomBody extends StatefulWidget {
+  @override
+  __PinPageCustomBodyState createState() => __PinPageCustomBodyState();
+}
+
+class __PinPageCustomBodyState extends State<_PinPageCustomBody> {
+  final TextEditingController controller = TextEditingController();
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final TextEditingController controller = TextEditingController();
     return ExamplePage(
         title: 'Pin with custom input',
         child: Padding(
@@ -64,10 +90,10 @@ class _PinPageCustomBody extends StatelessWidget {
           child: Column(children: [
             PinInput(
               controller: controller,
-              spaceBetween: 10,
+              spaceBetween: 20,
               hasError: false,
               //If this is changed also change the value of pageInputKeyboard
-              pinInputsAmount: 5,
+              pinInputsAmount: 3,
               onCodeCompleted: (pinCode) => {},
               pinFieldBuilder: (data) => _PinField(
                 height: data.height,

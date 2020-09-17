@@ -35,8 +35,7 @@ class PinInput extends StatefulWidget {
 }
 
 class _PinInputState extends State<PinInput> {
-  var values = Map<int, String>();
-  List<Widget> pinInputs = [];
+  final values = Map<int, String>();
 
   @override
   void initState() {
@@ -55,13 +54,12 @@ class _PinInputState extends State<PinInput> {
     for (var i = 0; i < widget.pinInputsAmount; i++) {
       values[i] = _kPlaceholder;
     }
-
-    _rebuildInputWidgets();
   }
 
   @override
   Widget build(BuildContext context) {
-    _rebuildInputWidgets(shouldResetPinInputs: true);
+    final pinInputs = _createPinInputs();
+
     return GestureDetector(
       onTap: () => widget.focusNode?.requestFocus(),
       child: Row(children: pinInputs),
@@ -71,35 +69,27 @@ class _PinInputState extends State<PinInput> {
   bool _isFieldFocused(int index) {
     if (widget.focusNode != null && !widget.focusNode.hasFocus) return false;
 
-    var filledValues = 0;
-
-    values.forEach((index, value) {
-      if (values[index] != _kPlaceholder) filledValues++;
-    });
-
-    return index == filledValues;
+    final firstEmpty = values.entries.firstWhere((entry) => entry.value == _kPlaceholder, orElse: () => null);
+    return firstEmpty?.key == index;
   }
 
   void _updatePinValues(String value) {
-    final splitted = value.split('');
+    final splitted = value.split('').asMap();
 
     if (mounted) {
       setState(() {
         //First reset the values map
-        values = Map<int, String>();
+        values.clear();
+
         //Then fill it with placeholders again
-
         for (var i = 0; i < widget.pinInputsAmount; i++) {
-          values[i] = _kPlaceholder;
+          values[i] = splitted.entries
+              .firstWhere(
+                (entry) => entry.key == i,
+                orElse: () => MapEntry(0, _kPlaceholder),
+              )
+              .value;
         }
-        //Add all the new values the got
-        splitted.asMap().forEach((index, value) {
-          if (index == 0) values[index] = splitted.isNotEmpty ? splitted[index] : _kPlaceholder;
-          values[index] = splitted.length > index ? splitted[index] : _kPlaceholder;
-        });
-
-        //Finally we'll rebuild the inputs
-        _rebuildInputWidgets(shouldResetPinInputs: true);
       });
     }
 
@@ -108,12 +98,8 @@ class _PinInputState extends State<PinInput> {
     }
   }
 
-  void _rebuildInputWidgets({bool shouldResetPinInputs = false}) {
-    if (shouldResetPinInputs) {
-      setState(() {
-        pinInputs = [];
-      });
-    }
+  List<Widget> _createPinInputs() {
+    final pinInputs = <Widget>[];
 
     values.forEach((index, value) {
       pinInputs.add(widget.pinFieldBuilder(PinFieldData(
@@ -124,6 +110,7 @@ class _PinInputState extends State<PinInput> {
       )));
     });
 
+    return pinInputs.separated(SizedBox(width: widget.spaceBetween)).cast<Widget>();
   }
 }
 
@@ -172,9 +159,8 @@ class PageInputKeyboard extends StatelessWidget {
       if (i == 11) digit = 0;
       digitWidgets.add(TappableOverlay(
         shape: shapeBorder,
-        onTap: () =>
-        {
-          if (controller.text.length < pinInputsAmount ) {controller.text = '${controller.text}$digit'}
+        onTap: () => {
+          if (controller.text.length < pinInputsAmount) {controller.text = '${controller.text}$digit'}
         },
         child: digitBuilder(
           DigitData(digit: digit),
@@ -217,15 +203,15 @@ class PageInputKeyboard extends StatelessWidget {
             digitWidgets[10],
             deleteButton != null
                 ? TappableOverlay(
-              shape: shapeBorder,
-              onTap: () {
-                if (controller.text.length > 0) {
-                  var pinValues = controller.text.substring(0, controller.text.length - 1);
-                  controller.text = pinValues;
-                }
-              },
-              child: Center(child: deleteButton),
-            )
+                    shape: shapeBorder,
+                    onTap: () {
+                      if (controller.text.length > 0) {
+                        var pinValues = controller.text.substring(0, controller.text.length - 1);
+                        controller.text = pinValues;
+                      }
+                    },
+                    child: Center(child: deleteButton),
+                  )
                 : Container()
           ].separated(SizedBox(
             width: horizontalSpacing,
