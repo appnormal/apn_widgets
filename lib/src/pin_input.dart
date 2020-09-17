@@ -1,5 +1,6 @@
 import 'package:apn_widgets/apn_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
 
 const _kPlaceholder = '';
@@ -99,10 +100,10 @@ class _PinInputState extends State<PinInput> {
   }
 
   List<Widget> _createPinInputs() {
-    final pinInputs = <Widget>[];
+    final inputs = <Widget>[];
 
     values.forEach((index, value) {
-      pinInputs.add(widget.pinFieldBuilder(PinFieldData(
+      inputs.add(widget.pinFieldBuilder(PinFieldData(
         height: widget.height,
         value: value,
         isFocussed: _isFieldFocused(index),
@@ -110,7 +111,31 @@ class _PinInputState extends State<PinInput> {
       )));
     });
 
-    return pinInputs.separated(SizedBox(width: widget.spaceBetween)).cast<Widget>();
+    final List<Widget> pinInputs = inputs.separated(SizedBox(width: widget.spaceBetween)).cast<Widget>();
+
+    /// Hidden form field to capture input
+
+    pinInputs.add(
+      Container(
+        width: 0,
+        height: 0,
+        child: TextFormField(
+          readOnly: !widget.showKeyboard,
+          keyboardType: TextInputType.number,
+          autocorrect: false,
+          focusNode: widget.focusNode,
+          controller: widget.controller,
+          cursorColor: Colors.transparent,
+          cursorWidth: 0,
+          enableInteractiveSelection: false,
+          inputFormatters: [
+            LengthLimitingTextInputFormatter(widget.pinInputsAmount),
+          ],
+        ),
+      ),
+    );
+
+    return pinInputs;
   }
 }
 
