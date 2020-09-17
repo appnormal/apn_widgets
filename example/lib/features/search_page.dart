@@ -17,11 +17,28 @@ class _SearchPageBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextEditingController controller = TextEditingController();
     return Center(
-      child: SearchBar(
-        onSearchCleared: () => {},
-        onFieldSubmitted: (String value) => {},
-        controller: controller,
-      ),
+      child: Column(children: [
+        SearchBar(
+          onSearchCleared: () => {},
+          onFieldSubmitted: (String value) => {},
+          controller: controller,
+        ),
+
+        SizedBox(height: 50),
+
+        SearchBar(
+          onSearchCleared: () => {},
+          onFieldSubmitted: (String value) => {},
+          controller: controller,
+          prefixIconColor: Colors.white,
+          suffixIconColor: Colors.white,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.pink, Colors.red]
+            )
+          ),
+        ),
+      ]),
     );
   }
 }

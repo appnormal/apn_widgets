@@ -1,3 +1,8 @@
+## [1.0.10] - 17 sept 2020
+
+* Add decoration property on Searchbar widget
+* Add prefixIconColor property on Searchbar widget
+
 ## [1.0.9] - 12 sept 2020
 
 * Add controller override to datalist

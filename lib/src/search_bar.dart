@@ -12,7 +12,9 @@ class SearchBar extends StatefulWidget {
     this.hintText,
     this.hintStyle,
     this.padding,
+    this.decoration,
     this.prefixIcon,
+    this.prefixIconColor,
     this.suffixIcon,
     this.suffixIconColor,
   }) : super(key: key);
@@ -23,6 +25,8 @@ class SearchBar extends StatefulWidget {
   final String hintText;
   final String prefixIcon;
   final String suffixIcon;
+  final BoxDecoration decoration;
+  final Color prefixIconColor;
   final Color suffixIconColor;
   final TextStyle hintStyle;
   final EdgeInsets padding;
@@ -48,11 +52,17 @@ class _SearchBarState extends State<SearchBar> {
     return Container(
       height: 63.0,
       padding: widget.padding ?? EdgeInsets.only(left: 20.0),
-      color: Colors.white,
+      decoration: widget.decoration ?? BoxDecoration(
+        color: Colors.white,
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Image.asset(widget.prefixIcon ?? 'lib/assets/ic_search.png', package: 'apn_widgets'),
+          Image.asset(
+            widget.prefixIcon ?? 'lib/assets/ic_search.png',
+            package: 'apn_widgets',
+            color: widget.prefixIconColor,
+          ),
           SizedBox(width: 15.0),
           Expanded(
             child: TextFormField(
@@ -91,7 +101,9 @@ class _SearchBarState extends State<SearchBar> {
               onTap: widget.onSearchCleared,
               color: Colors.transparent,
               child: Icon(
-                Theme.of(context).platform == TargetPlatform.iOS ? CupertinoIcons.clear_circled_solid : Icons.clear,
+                Theme
+                    .of(context)
+                    .platform == TargetPlatform.iOS ? CupertinoIcons.clear_circled_solid : Icons.clear,
                 color: widget.suffixIconColor ?? Colors.black,
               ),
             ),
