@@ -1,3 +1,7 @@
+## [1.0.11] - 17 sept 2020
+
+* Make textstyle overridable in Searchbar widget
+
 ## [1.0.10] - 17 sept 2020
 
 * Add decoration property on Searchbar widget

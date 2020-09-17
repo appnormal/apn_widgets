@@ -32,6 +32,10 @@ class _SearchPageBody extends StatelessWidget {
           controller: controller,
           prefixIconColor: Colors.white,
           suffixIconColor: Colors.white,
+          textStyle: TextStyle(
+            color: Colors.white,
+            fontSize: 18
+          ),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [Colors.pink, Colors.red]

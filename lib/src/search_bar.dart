@@ -11,6 +11,7 @@ class SearchBar extends StatefulWidget {
     @required this.onSearchCleared,
     this.hintText,
     this.hintStyle,
+    this.textStyle,
     this.padding,
     this.decoration,
     this.prefixIcon,
@@ -28,6 +29,7 @@ class SearchBar extends StatefulWidget {
   final BoxDecoration decoration;
   final Color prefixIconColor;
   final Color suffixIconColor;
+  final TextStyle textStyle;
   final TextStyle hintStyle;
   final EdgeInsets padding;
 
@@ -82,7 +84,7 @@ class _SearchBarState extends State<SearchBar> {
                     ),
               ),
               cursorColor: Colors.blueAccent,
-              style: TextStyle(
+              style: widget.textStyle ?? TextStyle(
                 color: Colors.black,
                 fontSize: 16.0,
                 fontWeight: FontWeight.w600,
