@@ -15,10 +15,6 @@ class PinInput extends StatefulWidget {
   final PinFieldBuilder pinFieldBuilder;
   final int pinInputsAmount;
 
-  bool get showKeyboard => focusNode != null;
-
-  String get pinCodeValue => controller.text;
-
   PinInput({
     Key key,
     this.height = 56,
@@ -37,6 +33,12 @@ class PinInput extends StatefulWidget {
 
 class _PinInputState extends State<PinInput> {
   final values = Map<int, String>();
+  var previousValueLength;
+
+
+  bool get showKeyboard => widget.focusNode != null;
+
+  String get pinCodeValue => widget.controller.text;
 
   @override
   void initState() {
@@ -94,9 +96,11 @@ class _PinInputState extends State<PinInput> {
       });
     }
 
-    if (widget.onCodeCompleted != null && splitted.length == widget.pinInputsAmount) {
-      widget.onCodeCompleted(widget.pinCodeValue);
+    if (widget.onCodeCompleted != null && splitted.length == widget.pinInputsAmount && splitted.length != previousValueLength) {
+      widget.onCodeCompleted(pinCodeValue);
     }
+
+    previousValueLength = splitted.length;
   }
 
   List<Widget> _createPinInputs() {
@@ -120,7 +124,7 @@ class _PinInputState extends State<PinInput> {
         width: 0,
         height: 0,
         child: TextFormField(
-          readOnly: !widget.showKeyboard,
+          readOnly: !showKeyboard,
           keyboardType: TextInputType.number,
           autocorrect: false,
           focusNode: widget.focusNode,
