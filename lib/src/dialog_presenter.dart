@@ -64,7 +64,7 @@ class _DialogPresenterState extends State<DialogPresenter> {
     );
   }
 
-  void showError(ErrorResponse error) => showAlert(appName, error.error.message);
+  Future<void> showError(ErrorResponse error) => showAlert(appName, error.error.message);
 
   void popDialog<T>([T result]) {
     activeDialog.completer.complete(result);
