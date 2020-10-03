@@ -1,4 +1,4 @@
-## [1.0.14] - 3 okt 2020
+## [1.0.15] - 3 okt 2020
 
 * Allow update of dialog helper strings after creation (useful is localizations is initialized lower in the widget tree)
 
