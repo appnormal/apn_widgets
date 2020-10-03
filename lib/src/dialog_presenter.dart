@@ -29,14 +29,40 @@ class DialogPresenter extends StatefulWidget {
 
 class _DialogPresenterState extends State<DialogPresenter> {
   BuildContext callingContext;
+  Map<String, String> strings;
 
   Dialog activeDialog;
   final queue = <Dialog>[];
 
-  bool get hasStrings => widget.strings != null && widget.strings.isNotEmpty;
-  String get appName => hasStrings ? widget.strings.containsKey(kStringAppName) ? widget.strings[kStringAppName] : 'App' : 'App';
-  String get ok => hasStrings ? widget.strings.containsKey(kStringOK) ? widget.strings[kStringOK] : 'OK' : 'OK';
-  String get settings => hasStrings ?  widget.strings.containsKey(kStringAppSettings) ? widget.strings[kStringAppSettings] : 'Open settings' : 'Open settings';
+  bool get hasStrings => strings != null && strings.isNotEmpty;
+
+  String get appName => hasStrings
+      ? strings.containsKey(kStringAppName)
+          ? strings[kStringAppName]
+          : 'App'
+      : 'App';
+
+  String get ok => hasStrings
+      ? strings.containsKey(kStringOK)
+          ? strings[kStringOK]
+          : 'OK'
+      : 'OK';
+
+  String get settings => hasStrings
+      ? strings.containsKey(kStringAppSettings)
+          ? strings[kStringAppSettings]
+          : 'Open settings'
+      : 'Open settings';
+
+  @override
+  void initState() {
+    super.initState();
+    strings = widget.strings;
+  }
+
+  void updateStrings(Map<String, String> stringMap) {
+    setState(() => strings = stringMap);
+  }
 
   @override
   Widget build(BuildContext context) {

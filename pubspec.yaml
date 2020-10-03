@@ -1,6 +1,6 @@
 name: apn_widgets
 description: A carefully curated collection of widget made by and used within Appnormal projects
-version: 1.0.13
+version: 1.0.14
 homepage: https://appnormal.com
 
 environment:
@@ -11,10 +11,10 @@ dependencies:
   flutter:
     sdk: flutter
   apn_http: ^1.0.4
-  apn_analytics: ^1.0.1
+  apn_analytics: ^1.0.2
   cupertino_icons: ^1.0.0
   keyboard_visibility: ^0.5.6
-  app_settings: ^4.0.3
+  app_settings: ^4.0.4
   flare_flutter: ^2.0.6
   intl:
 
