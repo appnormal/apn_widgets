@@ -61,7 +61,7 @@ class _DialogPresenterState extends State<DialogPresenter> {
   }
 
   void updateStrings(Map<String, String> stringMap) {
-    setState(() => strings = stringMap);
+    strings = stringMap;
   }
 
   @override
