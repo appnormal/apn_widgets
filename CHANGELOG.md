@@ -1,8 +1,12 @@
-## [1.0.16] - 6 okt 2020
+## [1.0.17] - 15 oct 2020
+
+* Add choices dialog
+
+## [1.0.16] - 6 oct 2020
 
 * Fix incorrect setState in updateStrings method of the DialogPresenter
 
-## [1.0.15] - 3 okt 2020
+## [1.0.15] - 3 oct 2020
 
 * Allow update of dialog helper strings after creation (useful is localizations is initialized lower in the widget tree)
 

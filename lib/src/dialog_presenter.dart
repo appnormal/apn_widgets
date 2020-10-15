@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:apn_http/apn_http.dart';
 import 'package:apn_widgets/apn_widgets.dart';
+import 'package:apn_widgets/src/radio_button_dialog.dart';
 import 'package:app_settings/app_settings.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 const kStringOK = 'OK';
@@ -153,6 +156,48 @@ class _DialogPresenterState extends State<DialogPresenter> {
         },
       ),
     ]);
+  }
+
+  Future<int> showPlatformChoiceDialog(
+    List<CupertinoActionSheetAction> cupertinoChoices,
+    List<String> materialLabels,
+    String title,
+    String cancelButtonText,
+    String confirmButtonText, {
+    Widget cupertinoMessage,
+  }) async {
+    if (Platform.isIOS) {
+      showCupertinoModalPopup(
+          context: callingContext,
+          builder: (context) {
+            return CupertinoActionSheet(
+              actions: cupertinoChoices,
+              message: cupertinoMessage,
+              cancelButton: CupertinoActionSheetAction(
+                onPressed: () => Navigator.of(callingContext).pop(),
+                isDefaultAction: true,
+                child: Text(
+                  cancelButtonText,
+                  style: const TextStyle(color: CupertinoColors.activeBlue),
+                ),
+              ),
+            );
+          });
+    } else {
+      final choice = await showDialog<int>(
+          context: callingContext,
+          builder: (dialogContext) {
+            return RadioButtonDialog(
+                title: title,
+                buttonLabels: materialLabels,
+                cancelText: cancelButtonText,
+                confirmText: confirmButtonText,
+                onConfirm: (choice) {
+                  Navigator.of(dialogContext).pop(choice);
+                });
+          });
+      return choice;
+    }
   }
 }
 
