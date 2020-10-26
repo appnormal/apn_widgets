@@ -164,7 +164,7 @@ class _DialogPresenterState extends State<DialogPresenter> {
     String title,
     String cancelButtonText,
     String confirmButtonText, {
-    Widget cupertinoMessage,
+    Widget message,
   }) async {
     if (Platform.isIOS) {
       showCupertinoModalPopup(
@@ -172,7 +172,7 @@ class _DialogPresenterState extends State<DialogPresenter> {
           builder: (context) {
             return CupertinoActionSheet(
               actions: cupertinoChoices,
-              message: cupertinoMessage,
+              message: message,
               cancelButton: CupertinoActionSheetAction(
                 onPressed: () => Navigator.of(callingContext).pop(),
                 isDefaultAction: true,
@@ -192,6 +192,7 @@ class _DialogPresenterState extends State<DialogPresenter> {
                 buttonLabels: materialLabels,
                 cancelText: cancelButtonText,
                 confirmText: confirmButtonText,
+                message: message,
                 onConfirm: (choice) {
                   Navigator.of(dialogContext).pop(choice);
                 });

@@ -6,6 +6,7 @@ class RadioButtonDialog extends StatefulWidget {
   final String confirmText;
   final List<String> buttonLabels;
   final ValueSetter<int> onConfirm;
+  final Widget message;
 
   const RadioButtonDialog({
     Key key,
@@ -14,6 +15,7 @@ class RadioButtonDialog extends StatefulWidget {
     @required this.onConfirm,
     @required this.cancelText,
     @required this.confirmText,
+    this.message,
   }) : super(key: key);
 
   @override
@@ -50,7 +52,17 @@ class _RadioButtonDialogState extends State<RadioButtonDialog> {
       _index++;
     }
 
-    final content = Column(mainAxisSize: MainAxisSize.min, children: contentWidgets);
+    var content = Column(mainAxisSize: MainAxisSize.min, children: contentWidgets);
+
+    if (widget.message != null) {
+      content = Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          widget.message,
+          content,
+        ],
+      );
+    }
 
     return AlertDialog(
       title: Text(widget.title),
