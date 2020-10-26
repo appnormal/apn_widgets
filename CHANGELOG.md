@@ -1,4 +1,4 @@
-## [1.0.17] - 26 oct 2020
+## [1.0.18] - 26 oct 2020
 
 * Add message to material choices dialog
 
