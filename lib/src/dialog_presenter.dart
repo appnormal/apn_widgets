@@ -159,14 +159,31 @@ class _DialogPresenterState extends State<DialogPresenter> {
   }
 
   Future<int> showPlatformChoiceDialog(
-    List<CupertinoActionSheetAction> cupertinoChoices,
-    List<String> materialLabels,
+    List<PlatformChoiceAction> actions,
     String title,
     String cancelButtonText,
     String confirmButtonText, {
     Widget message,
-  }) async {
+  }) {
+    final completer = Completer<int>();
+
     if (Platform.isIOS) {
+      final cupertinoChoices = <CupertinoDialogAction>[];
+      var index = 0;
+
+      for (final action in actions) {
+        final choiceIndex = index++;
+        cupertinoChoices.add(CupertinoDialogAction(
+          child: Text(action.text),
+          isDefaultAction: action.isDefaultAction,
+          isDestructiveAction: action.isDestructiveAction,
+          onPressed: () {
+            Navigator.of(callingContext).pop();
+            completer.complete(choiceIndex);
+          },
+        ));
+      }
+
       showCupertinoModalPopup(
           context: callingContext,
           builder: (context) {
@@ -184,7 +201,13 @@ class _DialogPresenterState extends State<DialogPresenter> {
             );
           });
     } else {
-      final choice = await showDialog<int>(
+      final materialLabels = <String>[];
+
+      for (final action in actions) {
+        materialLabels.add(action.text);
+      }
+
+      showDialog<int>(
           context: callingContext,
           builder: (dialogContext) {
             return RadioButtonDialog(
@@ -195,10 +218,11 @@ class _DialogPresenterState extends State<DialogPresenter> {
                 message: message,
                 onConfirm: (choice) {
                   Navigator.of(dialogContext).pop(choice);
+                  completer.complete(choice);
                 });
           });
-      return choice;
     }
+    return completer.future;
   }
 }
 
@@ -221,4 +245,16 @@ class Dialog<T> {
   Widget widget;
 
   Dialog(this.widget);
+}
+
+class PlatformChoiceAction {
+  final String text;
+  final bool isDefaultAction;
+  final bool isDestructiveAction;
+
+  PlatformChoiceAction({
+    @required this.text,
+    this.isDefaultAction = false,
+    this.isDestructiveAction = false,
+  });
 }

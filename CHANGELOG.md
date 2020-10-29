@@ -1,3 +1,7 @@
+## [1.0.19] - 29 oct 2020
+
+* Made platform choices dialog choice handling uniform between platforms 
+
 ## [1.0.18] - 26 oct 2020
 
 * Add message to material choices dialog

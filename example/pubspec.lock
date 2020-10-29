@@ -28,21 +28,21 @@ packages:
       name: apn_http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.4"
+    version: "1.0.6"
   apn_state:
     dependency: transitive
     description:
       name: apn_state
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.7"
+    version: "1.2.9"
   apn_widgets:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "1.0.17"
+    version: "1.0.18"
   app_settings:
     dependency: transitive
     description:

@@ -69,13 +69,13 @@ class _RadioButtonDialogState extends State<RadioButtonDialog> {
       content: content,
       actions: <Widget>[
         FlatButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(widget.cancelText),
+        ),
+        FlatButton(
           onPressed: () => widget.onConfirm(_selectedIndex),
           child: Text(widget.confirmText),
         ),
-        FlatButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(widget.cancelText),
-        )
       ],
     );
   }
