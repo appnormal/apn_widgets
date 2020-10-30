@@ -1,3 +1,7 @@
+## [1.0.19] - 30 oct 2020
+
+* Add image picker
+
 ## [1.0.19] - 29 oct 2020
 
 * Made platform choices dialog choice handling uniform between platforms 

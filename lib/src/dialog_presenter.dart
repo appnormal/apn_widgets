@@ -7,10 +7,14 @@ import 'package:apn_widgets/src/radio_button_dialog.dart';
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 
 const kStringOK = 'OK';
 const kStringAppName = 'NAME';
 const kStringAppSettings = 'SETTINGS';
+const kStringCancel = 'CANCEL';
+const kStringConfirm = 'CONFIRM';
 
 class DialogPresenter extends StatefulWidget {
   static _DialogPresenterState of(BuildContext context) {
@@ -56,6 +60,18 @@ class _DialogPresenterState extends State<DialogPresenter> {
           ? strings[kStringAppSettings]
           : 'Open settings'
       : 'Open settings';
+
+  String get cancel => hasStrings
+      ? strings.containsKey(kStringCancel)
+          ? strings[kStringCancel]
+          : 'Cancel'
+      : 'Cancel';
+
+  String get confirm => hasStrings
+      ? strings.containsKey(kStringConfirm)
+          ? strings[kStringConfirm]
+          : 'Confirm'
+      : 'Confirm';
 
   @override
   void initState() {
@@ -223,6 +239,46 @@ class _DialogPresenterState extends State<DialogPresenter> {
           });
     }
     return completer.future;
+  }
+
+  Future<File> showImagePickerDialog(
+      {@required String optionsTitle,
+      @required String cameraOption,
+      @required String galleryOption,
+      @required String errorTitle,
+      @required String errorMessage}) async {
+    final picker = ImagePicker();
+
+    final actions = [PlatformChoiceAction(text: cameraOption), PlatformChoiceAction(text: galleryOption)];
+
+    PickedFile pickedImage;
+
+    //Ask for source
+    final choice = await DialogPresenter.of(callingContext).showPlatformChoiceDialog(
+      actions,
+      optionsTitle,
+      cancel,
+      confirm,
+    );
+
+    try {
+      //Get image
+      switch (choice) {
+        //Camera
+        case 0:
+          pickedImage = await picker.getImage(source: ImageSource.camera);
+          break;
+        //Gallery
+        case 1:
+          pickedImage = await picker.getImage(source: ImageSource.gallery);
+          break;
+      }
+    } on PlatformException catch (_) {
+      //We don't have permission if we get here, so let's let the user know
+      DialogPresenter.of(callingContext).showOpenAppSettingsAlert(errorTitle, errorMessage);
+    }
+
+    return File(pickedImage.path);
   }
 }
 
