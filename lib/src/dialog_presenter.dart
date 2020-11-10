@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:apn_http/apn_http.dart';
 import 'package:apn_widgets/apn_widgets.dart';
+import 'package:apn_widgets/src/ios_date_time_picker.dart';
 import 'package:apn_widgets/src/radio_button_dialog.dart';
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/cupertino.dart';
@@ -279,6 +280,85 @@ class _DialogPresenterState extends State<DialogPresenter> {
     }
 
     return File(pickedImage.path);
+  }
+
+  Future<DateTime> showDatePickerDialog(MaterialColor primarySwatch,
+      {DateTime initialDate, DateTime maxDate, DateTime minDate}) async {
+    DateTime picked;
+    if (Platform.isIOS) {
+      picked = await showCupertinoModalPopup<DateTime>(
+        context: callingContext,
+        builder: (BuildContext context) {
+          return IOSDateTimePicker(
+            currentDate: initialDate ?? DateTime.now(),
+            maxDate: maxDate,
+            minDate: minDate,
+          );
+        },
+      );
+    } else {
+      picked = await showDatePicker(
+        context: callingContext,
+        initialDate: initialDate ?? DateTime.now(),
+        firstDate: minDate,
+        lastDate: maxDate,
+        // can't be null if infinite like iOS
+        builder: (BuildContext context, Widget child) {
+          return Theme(
+            data: ThemeData.from(
+                colorScheme: ColorScheme.fromSwatch(
+              primarySwatch: primarySwatch,
+              backgroundColor: Colors.white,
+            )),
+            child: child,
+          );
+        },
+      );
+    }
+
+    return picked;
+  }
+
+  Future<TimeOfDay> showTimeOfDayPickerDialog({
+    TimeOfDay initialTime,
+    int minuteInterval = 1,
+    bool use24HourFormat = false,
+  }) async {
+    TimeOfDay picked;
+    var currentDate = DateTime.now();
+    if (Platform.isIOS) {
+      var pickedDateTime = await showCupertinoModalPopup(
+          context: callingContext,
+          builder: (BuildContext context) {
+            if (initialTime != null) {
+              currentDate = DateTime(
+                currentDate.year,
+                currentDate.month,
+                currentDate.day,
+                initialTime.hour,
+                initialTime.minute,
+              );
+            }
+            return IOSDateTimePicker(
+              use24HourFormat: use24HourFormat,
+              minuteInterval: minuteInterval,
+              mode: CupertinoDatePickerMode.time,
+              currentDate: currentDate,
+              doneButtonText: confirm,
+            );
+          });
+
+      if (pickedDateTime != null) {
+        picked = TimeOfDay.fromDateTime(pickedDateTime);
+      }
+    } else {
+      picked = await showTimePicker(
+        context: callingContext,
+        initialTime: initialTime ?? TimeOfDay.now(),
+      );
+    }
+
+    return picked;
   }
 }
 

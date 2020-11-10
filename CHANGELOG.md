@@ -1,3 +1,7 @@
+## [1.0.21] - 10 nov 2020
+
+* Date and time picker
+
 ## [1.0.20] - 30 oct 2020
 
 * Add image picker
