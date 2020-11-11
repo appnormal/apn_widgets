@@ -353,9 +353,14 @@ class _DialogPresenterState extends State<DialogPresenter> {
       }
     } else {
       picked = await showTimePicker(
-        context: callingContext,
-        initialTime: initialTime ?? TimeOfDay.now(),
-      );
+          context: callingContext,
+          initialTime: initialTime ?? TimeOfDay.now(),
+          builder: (context, child) {
+            return MediaQuery(
+              data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: use24HourFormat),
+              child: child,
+            );
+          });
     }
 
     return picked;

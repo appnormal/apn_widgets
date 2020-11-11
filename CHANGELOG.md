@@ -1,3 +1,7 @@
+## [1.0.22] - 11 nov 2020
+
+* Add 24 hour to Android time picker
+
 ## [1.0.21] - 10 nov 2020
 
 * Date and time picker
