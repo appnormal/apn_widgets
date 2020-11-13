@@ -1,3 +1,7 @@
+## [1.0.23] - 13 nov 2020
+
+* Add platform switch
+
 ## [1.0.22] - 11 nov 2020
 
 * Add 24 hour to Android time picker
