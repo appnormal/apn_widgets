@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -38,7 +36,7 @@ extension StringExtension on String {
 
 
 extension DateTimeExtension on DateTime {
-  String format(String pattern) => DateFormat(pattern, Platform.localeName).format(this);
+  String format(String pattern) => DateFormat(pattern).format(this);
 
   String formatIso() => format("yyyy-MM-dd'T'HH:mm:ss") + formatTZ();
 
