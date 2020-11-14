@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io';
+import 'dart:io' if(kIsWeb) 'dart:html';
 
 import 'package:apn_http/apn_http.dart';
 import 'package:apn_widgets/apn_widgets.dart';
@@ -184,7 +184,7 @@ class _DialogPresenterState extends State<DialogPresenter> {
   }) {
     final completer = Completer<int>();
 
-    if (Platform.isIOS) {
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
       final cupertinoChoices = <CupertinoDialogAction>[];
       var index = 0;
 
@@ -285,7 +285,7 @@ class _DialogPresenterState extends State<DialogPresenter> {
   Future<DateTime> showDatePickerDialog(MaterialColor primarySwatch,
       {DateTime initialDate, DateTime maxDate, DateTime minDate}) async {
     DateTime picked;
-    if (Platform.isIOS) {
+    if (Theme.of(callingContext).platform == TargetPlatform.iOS) {
       picked = await showCupertinoModalPopup<DateTime>(
         context: callingContext,
         builder: (BuildContext context) {
@@ -326,7 +326,7 @@ class _DialogPresenterState extends State<DialogPresenter> {
   }) async {
     TimeOfDay picked;
     var currentDate = DateTime.now();
-    if (Platform.isIOS) {
+    if (Theme.of(callingContext).platform == TargetPlatform.iOS) {
       var pickedDateTime = await showCupertinoModalPopup(
           context: callingContext,
           builder: (BuildContext context) {

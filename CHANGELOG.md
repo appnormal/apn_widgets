@@ -1,3 +1,7 @@
+## [1.1.0] - 14 nov 2020
+
+* Remove references to dart.io so that its easier to implement this package on web
+
 ## [1.0.23] - 13 nov 2020
 
 * Add platform switch
