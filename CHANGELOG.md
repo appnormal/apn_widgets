@@ -1,3 +1,7 @@
+## [1.0.24] - 16 nov 2020
+
+* Expand platform switch color selection
+
 ## [1.0.23] - 13 nov 2020
 
 * Add platform switch

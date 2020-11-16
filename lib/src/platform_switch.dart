@@ -6,7 +6,11 @@ import 'package:flutter/material.dart';
 
 class PlatformSwitch extends StatelessWidget {
   final Color activeColor;
-  final Color trackColor;
+  final Color activeTrackColor;
+  final Color inactiveTrackColor;
+  final Color activeThumbColor;
+  final Color inactiveThumbColor;
+
   final DragStartBehavior dragStartBehaviour;
   final bool value;
   final ValueChanged<bool> onValueChanged;
@@ -16,8 +20,11 @@ class PlatformSwitch extends StatelessWidget {
     this.value = false,
     this.onValueChanged,
     this.activeColor,
-    this.trackColor,
     this.dragStartBehaviour = DragStartBehavior.start,
+    this.activeTrackColor,
+    this.inactiveTrackColor,
+    this.activeThumbColor,
+    this.inactiveThumbColor,
   }) : super(key: key);
 
   @override
@@ -27,16 +34,22 @@ class PlatformSwitch extends StatelessWidget {
         value: value,
         onChanged: onValueChanged,
         activeColor: activeColor,
-        trackColor: trackColor,
+        trackColor: value ? activeTrackColor : inactiveTrackColor,
         dragStartBehavior: dragStartBehaviour,
       );
     }
-    //The colors do 't really work for the material switch. That's why we don't use them
-    return Switch(
-      value: value,
-      onChanged: onValueChanged,
-      activeColor: activeColor,
-      dragStartBehavior: dragStartBehaviour,
+
+    return Theme(
+      data: ThemeData(accentColor: activeThumbColor),
+      child: Switch(
+        value: value,
+        onChanged: onValueChanged,
+        activeColor: activeColor,
+        dragStartBehavior: dragStartBehaviour,
+        activeTrackColor: activeTrackColor.withOpacity(0.6),
+        inactiveThumbColor: inactiveThumbColor,
+        inactiveTrackColor: inactiveTrackColor.withOpacity(0.6),
+      ),
     );
   }
 }
