@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'dart:io';
 import 'dart:math' as math;
 
 import 'package:flutter/cupertino.dart';
@@ -24,10 +23,7 @@ class PlatformLoader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (Platform.environment.containsKey('FLUTTER_TEST')) {
-      // See https://github.com/flutter/flutter/issues/18292 for more info
-      return Container();
-    } else if (Theme.of(context).platform == TargetPlatform.iOS) {
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
       return CupertinoActivityIndicator(
         tintColor: cupertinoTintColor,
         activeTintColor: cupertinoActiveTintColor,

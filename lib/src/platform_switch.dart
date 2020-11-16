@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +27,7 @@ class PlatformSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (Platform.isIOS) {
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
       return CupertinoSwitch(
         value: value,
         onChanged: onValueChanged,

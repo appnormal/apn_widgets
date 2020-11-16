@@ -1,6 +1,10 @@
-## [1.0.24] - 16 nov 2020
+## [1.1.2] - 16 nov 2020
 
 * Expand platform switch color selection
+
+## [1.1.1] - 14 nov 2020
+
+* Remove references to dart.io so that its easier to implement this package on web
 
 ## [1.0.23] - 13 nov 2020
 
