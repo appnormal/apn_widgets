@@ -1,3 +1,7 @@
+## [1.1.3] - 17 nov 2020
+
+* Allow border radius change on primary button
+
 ## [1.1.2] - 16 nov 2020
 
 * Expand platform switch color selection

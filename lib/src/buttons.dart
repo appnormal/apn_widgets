@@ -1,4 +1,3 @@
-
 import 'package:apn_widgets/src/platform_loader.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +11,7 @@ class PrimaryButton extends StatelessWidget {
   final VoidCallback onPressed;
   final bool loading;
   final List<BoxShadow> boxShadow;
+  final double borderRadius;
 
   const PrimaryButton({
     Key key,
@@ -19,6 +19,7 @@ class PrimaryButton extends StatelessWidget {
     this.onPressed,
     this.boxShadow,
     this.loading = false,
+    this.borderRadius = 12.0,
   }) : super(key: key);
 
   @override
@@ -45,7 +46,7 @@ class PrimaryButton extends StatelessWidget {
     return PlatformButton(
       child: Center(child: child),
       onTap: !loading ? onPressed : null,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(borderRadius),
       boxShadow: boxShadow,
       color: Theme.of(context).primaryColor,
     );
