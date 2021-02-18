@@ -159,20 +159,37 @@ class _MeasureSize extends StatefulWidget {
   _MeasureSizeState createState() => _MeasureSizeState();
 }
 
-class _MeasureSizeState extends State<_MeasureSize> {
-  @override
-  Widget build(BuildContext context) {
-    SchedulerBinding.instance.addPostFrameCallback(postFrameCallback);
-    return Container(
-      key: widgetKey,
-      child: widget.child,
-    );
-  }
-
+class _MeasureSizeState extends State<_MeasureSize>  {
   var widgetKey = GlobalKey();
   var oldSize;
 
-  void postFrameCallback(_) {
+  @override
+  void initState() {
+    super.initState();
+    measureSizeNextFrame();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return NotificationListener<SizeChangedLayoutNotification>(
+      onNotification: (notification) {
+        measureSizeNextFrame();
+        return true;
+      },
+      child: Container(
+        key: widgetKey,
+        child: SizeChangedLayoutNotifier(
+          child: widget.child,
+        ),
+      ),
+    );
+  }
+
+  void measureSizeNextFrame() {
+    WidgetsBinding.instance.addPostFrameCallback(measureWidget);
+  }
+
+  void measureWidget(_) {
     var context = widgetKey.currentContext;
     if (context == null) return;
 

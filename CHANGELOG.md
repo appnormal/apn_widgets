@@ -1,3 +1,7 @@
+## [1.1.4] - 18 feb 2021
+
+* Fix bug in TappableOverlay size calculation
+
 ## [1.1.3] - 17 nov 2020
 
 * Allow border radius change on primary button
@@ -28,7 +32,7 @@
 
 ## [1.0.19] - 29 oct 2020
 
-* Made platform choices dialog choice handling uniform between platforms 
+* Made platform choices dialog choice handling uniform between platforms
 
 ## [1.0.18] - 26 oct 2020
 
