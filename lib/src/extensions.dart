@@ -26,14 +26,16 @@ extension IterableExtension on Iterable {
 
   Iterable unique() => toSet().toList();
 
-  Iterable separated(Widget separator) =>
-      map((element) => <Widget>[element, separator]).merge<Widget>().toList()..removeLast();
+  Iterable separated(Widget separator) {
+    List<Widget> list = map((element) => <Widget>[element, separator]).merge<Widget>().toList();
+    if (list.isNotEmpty) list = list..removeLast();
+    return list;
+  }
 }
 
 extension StringExtension on String {
   String get ucFirst => substring(0, 1).toUpperCase() + substring(1);
 }
-
 
 extension DateTimeExtension on DateTime {
   String format(String pattern) => DateFormat(pattern).format(this);

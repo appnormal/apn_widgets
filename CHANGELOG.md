@@ -1,3 +1,7 @@
+## [1.1.5] - 23 feb 2021
+
+* Fix seperated on empty list
+
 ## [1.1.4] - 18 feb 2021
 
 * Fix bug in TappableOverlay size calculation
