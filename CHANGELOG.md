@@ -1,3 +1,7 @@
+## [1.1.6] - 24 feb 2021
+
+* Remove dialog queue in DialogPresenter (causes too many wierd bugs)
+
 ## [1.1.5] - 23 feb 2021
 
 * Fix seperated on empty list

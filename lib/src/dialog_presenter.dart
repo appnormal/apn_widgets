@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io' if(kIsWeb) 'dart:html';
+import 'dart:io' if (kIsWeb) 'dart:html';
 
 import 'package:apn_http/apn_http.dart';
 import 'package:apn_widgets/apn_widgets.dart';
@@ -40,7 +40,6 @@ class _DialogPresenterState extends State<DialogPresenter> {
   Map<String, String> strings;
 
   Dialog activeDialog;
-  final queue = <Dialog>[];
 
   bool get hasStrings => strings != null && strings.isNotEmpty;
 
@@ -102,56 +101,31 @@ class _DialogPresenterState extends State<DialogPresenter> {
     showDialog(context: callingContext, child: dialog.widget);
   }
 
-  void queueError(ErrorResponse error) {
-    showAlert(
-      appName,
-      error.error.message,
-      queueDialog: true,
-    );
-  }
-
   Future<void> showError(ErrorResponse error) => showAlert(appName, error.error.message);
 
   void popDialog<T>([T result]) {
     activeDialog.completer.complete(result);
-    Navigator.of(callingContext).maybePop();
+    Navigator.of(callingContext).pop();
   }
 
-  Future<T> showAlert<T>(String title, String message, {List<Widget> actions, bool queueDialog = false}) {
-    final closeAndShowNextInQueue = () {
-      activeDialog = null;
-      if (queue.isNotEmpty) {
-        _presentDialog(queue.removeAt(0));
-      }
-    };
-
-    final alert = WillPopScope(
-      onWillPop: () async {
-        closeAndShowNextInQueue();
-        return true;
-      },
-      child: PlatformAlertDialog(
-        title: Text(title),
-        content: Text(message),
-        actions: actions ??
-            <Widget>[
-              PlatformAlertDialogAction(
-                child: Text(ok),
-                onPressed: () {
-                  popDialog();
-                  closeAndShowNextInQueue();
-                },
-              )
-            ],
-      ),
+  Future<T> showAlert<T>(String title, String message, {List<Widget> actions}) {
+    final alert = PlatformAlertDialog(
+      title: Text(title),
+      content: Text(message),
+      actions: actions ??
+          <Widget>[
+            PlatformAlertDialogAction(
+              child: Text(ok),
+              onPressed: () {
+                popDialog();
+              },
+            )
+          ],
     );
 
     final dialog = Dialog<T>(alert);
-    if (queueDialog && activeDialog != null) {
-      queue.add(dialog);
-    } else {
-      _presentDialog(dialog);
-    }
+
+    _presentDialog(dialog);
 
     return dialog.completer.future;
   }
