@@ -1,3 +1,7 @@
+## [1.1.8] - 3 mar 2021
+
+* Use builder instead of child for showDialog in dialog presenter
+
 ## [1.1.7] - 26 feb 2021
 
 * Fix minor bug in completing active dialog
