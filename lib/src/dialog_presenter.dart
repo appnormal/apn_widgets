@@ -94,7 +94,10 @@ class _DialogPresenterState extends State<DialogPresenter> {
   void _presentDialog(Dialog dialog) {
     if (activeDialog != null && !activeDialog.completer.isCompleted) {
       activeDialog.completer.complete();
-      Navigator.of(callingContext).pop();
+      final canPop = Navigator.of(callingContext).canPop();
+      if (canPop) {
+        Navigator.of(callingContext).pop();
+      }
     }
 
     activeDialog = dialog;
@@ -106,7 +109,11 @@ class _DialogPresenterState extends State<DialogPresenter> {
   void popDialog<T>([T result]) {
     activeDialog.completer.complete(result);
     activeDialog = null;
-    Navigator.of(callingContext).pop();
+
+    final canPop = Navigator.of(callingContext).canPop();
+    if (canPop) {
+      Navigator.of(callingContext).pop();
+    }
   }
 
   Future<T> showAlert<T>(String title, String message, {List<Widget> actions}) {
