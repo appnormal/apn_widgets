@@ -1,6 +1,10 @@
-## [1.1.8] - 09 mar 2021
+## [1.1.9] - 09 mar 2021
 
 * Only pop dialog if we can pop
+
+## [1.1.8] - 3 mar 2021
+
+* Use builder instead of child for showDialog in dialog presenter
 
 ## [1.1.7] - 26 feb 2021
 

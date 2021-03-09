@@ -101,7 +101,7 @@ class _DialogPresenterState extends State<DialogPresenter> {
     }
 
     activeDialog = dialog;
-    showDialog(context: callingContext, child: dialog.widget);
+    showDialog(context: callingContext, builder: (_) => dialog.widget);
   }
 
   Future<void> showError(ErrorResponse error) => showAlert(appName, error.error.message);
