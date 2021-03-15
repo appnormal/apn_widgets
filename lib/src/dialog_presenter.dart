@@ -91,14 +91,18 @@ class _DialogPresenterState extends State<DialogPresenter> {
     );
   }
 
-  void _presentDialog(Dialog dialog) {
+  void _completeActive<T>([T result]) {
     if (activeDialog != null && !activeDialog.completer.isCompleted) {
-      activeDialog.completer.complete();
+      activeDialog.completer.complete(result);
       final canPop = Navigator.of(callingContext).canPop();
       if (canPop) {
         Navigator.of(callingContext).pop();
       }
     }
+  }
+
+  void _presentDialog(Dialog dialog) {
+    _completeActive();
 
     activeDialog = dialog;
     showDialog(context: callingContext, builder: (_) => dialog.widget);
@@ -106,29 +110,27 @@ class _DialogPresenterState extends State<DialogPresenter> {
 
   Future<void> showError(ErrorResponse error) => showAlert(appName, error.error.message);
 
-  void popDialog<T>([T result]) {
-    activeDialog.completer.complete(result);
-    activeDialog = null;
-
-    final canPop = Navigator.of(callingContext).canPop();
-    if (canPop) {
-      Navigator.of(callingContext).pop();
-    }
-  }
+  void popDialog<T>([T result]) => _completeActive(result);
 
   Future<T> showAlert<T>(String title, String message, {List<Widget> actions}) {
-    final alert = PlatformAlertDialog(
-      title: Text(title),
-      content: Text(message),
-      actions: actions ??
-          <Widget>[
-            PlatformAlertDialogAction(
-              child: Text(ok),
-              onPressed: () {
-                popDialog();
-              },
-            )
-          ],
+    final alert = WillPopScope(
+      onWillPop: () async {
+        _completeActive();
+        return true;
+      },
+      child: PlatformAlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: actions ??
+            <Widget>[
+              PlatformAlertDialogAction(
+                child: Text(ok),
+                onPressed: () {
+                  popDialog();
+                },
+              )
+            ],
+      ),
     );
 
     final dialog = Dialog<T>(alert);

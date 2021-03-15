@@ -1,3 +1,7 @@
+## [1.1.10] - 15 mar 2021
+
+* Complete dialog result handler on dismiss o
+
 ## [1.1.9] - 09 mar 2021
 
 * Only pop dialog if we can pop
