@@ -2,7 +2,6 @@ import 'package:apn_widgets/apn_widgets.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 const _kPlaceholder = '';
 
@@ -45,14 +44,6 @@ class _PinInputState extends State<PinInput> {
     super.initState();
 
     widget.controller.addListener(() => _updatePinValues(widget.controller.text));
-
-    /// When you dismiss the keyboard on Android,
-    /// we un-focus. So we can refocus in the onTap
-    KeyboardVisibilityController().onChange.listen(
-      (visible) {
-        if (!visible) widget.focusNode?.unfocus();
-      },
-    );
 
     for (var i = 0; i < widget.pinInputsAmount; i++) {
       values[i] = _kPlaceholder;

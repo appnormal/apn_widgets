@@ -7,7 +7,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "2.0.0-beta"
+    version: "2.0.0-beta.2"
   app_settings:
     dependency: transitive
     description:
@@ -83,27 +83,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_keyboard_visibility:
-    dependency: transitive
-    description:
-      name: flutter_keyboard_visibility
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "5.0.0"
-  flutter_keyboard_visibility_platform_interface:
-    dependency: transitive
-    description:
-      name: flutter_keyboard_visibility_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
-  flutter_keyboard_visibility_web:
-    dependency: transitive
-    description:
-      name: flutter_keyboard_visibility_web
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
