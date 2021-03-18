@@ -3,7 +3,6 @@ library apn_widgets;
 export 'src/animated_popup.dart';
 export 'src/base_tabs_page.dart';
 export 'src/buttons.dart';
-export 'src/data_list.dart';
 export 'src/dialog_presenter.dart';
 export 'src/extensions.dart';
 export 'src/message_placeholder.dart';

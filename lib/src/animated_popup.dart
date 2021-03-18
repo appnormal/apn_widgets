@@ -7,20 +7,20 @@ import 'package:flutter/material.dart';
 class _AnimatedPopup extends StatefulWidget {
   final String title;
   final String message;
-  final String animation;
-  final String animationName;
-  final Widget button;
-  final TextStyle titleStyle;
-  final TextStyle messageStyle;
-  final Duration timerDuration;
-  final IconColor statusbarIconColor;
+  final String? animation;
+  final String? animationName;
+  final Widget? button;
+  final TextStyle? titleStyle;
+  final TextStyle? messageStyle;
+  final Duration? timerDuration;
+  final IconColor? statusbarIconColor;
   final BoxDecoration decoration;
 
   const _AnimatedPopup({
-    Key key,
-    @required this.title,
-    @required this.message,
-    @required this.decoration,
+    Key? key,
+    required this.title,
+    required this.message,
+    required this.decoration,
     this.button,
     this.animation,
     this.animationName,
@@ -35,7 +35,7 @@ class _AnimatedPopup extends StatefulWidget {
 }
 
 class _AnimatedPopupState extends State<_AnimatedPopup> {
-  Timer timer;
+  Timer? timer;
 
   @override
   void initState() {
@@ -69,10 +69,10 @@ class _AnimatedPopupState extends State<_AnimatedPopup> {
                   child: Center(
                     child: ConstrainedBox(
                       constraints: BoxConstraints(maxHeight: 150),
-                      child: widget.animation != null
+                      child: widget.animation != null && widget.animationName != null
                           ? FlareActor(
-                              widget.animation,
-                              animation: widget.animationName,
+                              widget.animation!,
+                              animation: widget.animationName!,
                             )
                           : Container(),
                     ),
@@ -128,8 +128,8 @@ class _AnimatedPopupState extends State<_AnimatedPopup> {
 
 class _FadeUpwardsPageRoute<T> extends MaterialPageRoute<T> {
   _FadeUpwardsPageRoute({
-    @required WidgetBuilder builder,
-    RouteSettings settings,
+    required WidgetBuilder builder,
+    RouteSettings? settings,
     bool maintainState = true,
     bool fullscreenDialog = false,
   }) : super(
@@ -157,16 +157,16 @@ class _FadeUpwardsPageRoute<T> extends MaterialPageRoute<T> {
 }
 
 Future<void> showAnimatedPopup(BuildContext context,
-    {@required String title,
-    @required String message,
-    @required BoxDecoration decoration,
-    String animation,
-    String animationName,
-    Widget button,
-    TextStyle titleStyle,
-    TextStyle messageStyle,
-    Duration timerDuration,
-    IconColor statusbarIconColor}) {
+    {required String title,
+    required String message,
+    required BoxDecoration decoration,
+    String? animation,
+    String? animationName,
+    Widget? button,
+    TextStyle? titleStyle,
+    TextStyle? messageStyle,
+    Duration? timerDuration,
+    IconColor? statusbarIconColor}) {
   return Navigator.push(
       context,
       _FadeUpwardsPageRoute(
@@ -187,12 +187,12 @@ Future<void> showAnimatedPopup(BuildContext context,
 
 Future<void> showSuccessPopup(
   BuildContext context, {
-  @required String title,
-  @required String message,
-  @required BoxDecoration decoration,
-  TextStyle titleStyle,
-  TextStyle messageStyle,
-  IconColor statusbarIconColor,
+  required String title,
+  required String message,
+  required BoxDecoration decoration,
+  TextStyle? titleStyle,
+  TextStyle? messageStyle,
+  IconColor? statusbarIconColor,
 }) =>
     showAnimatedPopup(
       context,

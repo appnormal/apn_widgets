@@ -1,3 +1,13 @@
+## [2.0.0-beta] - 18 mar 2021
+
+# BIG BREAKING UPDATE
+
+* Null-safety enabled
+* Removed depencency on apn_crashlytics and apn_http
+* [BREAKING] Datalist is removed (if you want to use it, you can copy the widget from git history and use it in you project)
+* [BREAKING] BaseTab page no longer automatically calls analytics but exposes an onTabActive that can be used instead
+* [BREAKING] DialogHelper showError now accepts an Object instead of a ErrorResponse. toString is used to convert it into a message
+
 ## [1.1.10] - 15 mar 2021
 
 * Complete dialog result handler on dismiss o

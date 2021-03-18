@@ -2,16 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class IOSDateTimePicker extends StatefulWidget {
-  final DateTime currentDate;
-  final DateTime maxDate;
-  final DateTime minDate;
-  final CupertinoDatePickerMode mode;
+  final DateTime? currentDate;
+  final DateTime? maxDate;
+  final DateTime? minDate;
+  final CupertinoDatePickerMode? mode;
   final int minuteInterval;
-  final String doneButtonText;
-  final bool use24HourFormat;
+  final String? doneButtonText;
+  final bool? use24HourFormat;
 
   const IOSDateTimePicker({
-    Key key,
+    Key? key,
     this.currentDate,
     this.maxDate,
     this.minDate,
@@ -26,7 +26,7 @@ class IOSDateTimePicker extends StatefulWidget {
 }
 
 class _IOSDateTimePickerState extends State<IOSDateTimePicker> {
-  DateTime pickedDate;
+  DateTime? pickedDate;
 
   @override
   void initState() {

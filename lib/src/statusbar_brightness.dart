@@ -5,11 +5,11 @@ enum IconColor { WHITE, BLACK }
 
 class StatusbarColor extends StatelessWidget {
   final Widget child;
-  final IconColor iconColor;
+  final IconColor? iconColor;
 
   const StatusbarColor({
-    Key key,
-    @required this.child,
+    Key? key,
+    required this.child,
     this.iconColor = IconColor.WHITE,
   }) : super(key: key);
 

@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 
 class RadioButtonDialog extends StatefulWidget {
   final String title;
-  final String cancelText;
-  final String confirmText;
+  final String? cancelText;
+  final String? confirmText;
   final List<String> buttonLabels;
-  final ValueSetter<int> onConfirm;
-  final Widget message;
+  final ValueSetter<int?> onConfirm;
+  final Widget? message;
 
   const RadioButtonDialog({
-    Key key,
-    @required this.title,
-    @required this.buttonLabels,
-    @required this.onConfirm,
-    @required this.cancelText,
-    @required this.confirmText,
+    Key? key,
+    required this.title,
+    required this.buttonLabels,
+    required this.onConfirm,
+    required this.cancelText,
+    required this.confirmText,
     this.message,
   }) : super(key: key);
 
@@ -23,7 +23,7 @@ class RadioButtonDialog extends StatefulWidget {
 }
 
 class _RadioButtonDialogState extends State<RadioButtonDialog> {
-  var _selectedIndex = 0;
+  int? _selectedIndex = 0;
   var _index = 0;
 
   @override
@@ -58,7 +58,7 @@ class _RadioButtonDialogState extends State<RadioButtonDialog> {
       content = Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          widget.message,
+          widget.message!,
           content,
         ],
       );
@@ -68,13 +68,13 @@ class _RadioButtonDialogState extends State<RadioButtonDialog> {
       title: Text(widget.title),
       content: content,
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: Text(widget.cancelText),
+          child: Text(widget.cancelText!),
         ),
-        FlatButton(
+        TextButton(
           onPressed: () => widget.onConfirm(_selectedIndex),
-          child: Text(widget.confirmText),
+          child: Text(widget.confirmText!),
         ),
       ],
     );

@@ -6,7 +6,7 @@ class PlatformAlertDialog extends StatelessWidget {
   final Text content;
   final List<Widget> actions;
 
-  const PlatformAlertDialog({Key key, @required this.title, @required this.content, @required this.actions})
+  const PlatformAlertDialog({Key? key, required this.title, required this.content, required this.actions})
       : super(key: key);
 
   @override
@@ -33,9 +33,9 @@ class PlatformAlertDialogAction extends StatelessWidget {
   final bool isDefaultAction;
 
   const PlatformAlertDialogAction({
-    Key key,
-    @required this.child,
-    @required this.onPressed,
+    Key? key,
+    required this.child,
+    required this.onPressed,
     this.isDestructiveAction = false,
     this.isDefaultAction = false,
   }) : super(key: key);
@@ -50,7 +50,7 @@ class PlatformAlertDialogAction extends StatelessWidget {
         isDefaultAction: isDefaultAction,
       );
     } else {
-      return FlatButton(
+      return TextButton(
         child: child,
         onPressed: onPressed,
       );

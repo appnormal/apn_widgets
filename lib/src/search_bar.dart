@@ -5,10 +5,10 @@ import 'package:flutter/widgets.dart';
 
 class SearchBar extends StatefulWidget {
   const SearchBar({
-    Key key,
-    @required this.controller,
-    @required this.onFieldSubmitted,
-    @required this.onSearchCleared,
+    Key? key,
+    required this.controller,
+    required this.onFieldSubmitted,
+    required this.onSearchCleared,
     this.hintText,
     this.hintStyle,
     this.textStyle,
@@ -23,15 +23,15 @@ class SearchBar extends StatefulWidget {
   final TextEditingController controller;
   final ValueChanged<String> onFieldSubmitted;
   final VoidCallback onSearchCleared;
-  final String hintText;
-  final String prefixIcon;
-  final String suffixIcon;
-  final BoxDecoration decoration;
-  final Color prefixIconColor;
-  final Color suffixIconColor;
-  final TextStyle textStyle;
-  final TextStyle hintStyle;
-  final EdgeInsets padding;
+  final String? hintText;
+  final String? prefixIcon;
+  final String? suffixIcon;
+  final BoxDecoration? decoration;
+  final Color? prefixIconColor;
+  final Color? suffixIconColor;
+  final TextStyle? textStyle;
+  final TextStyle? hintStyle;
+  final EdgeInsets? padding;
 
   @override
   _SearchBarState createState() => _SearchBarState();

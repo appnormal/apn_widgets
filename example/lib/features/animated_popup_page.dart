@@ -17,7 +17,7 @@ class _AnimatedPopupBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Column(children: [
-        FlatButton(
+        TextButton(
           child: Text('Show animated popup'),
           onPressed: () => showAnimatedPopup(
             context,
@@ -33,7 +33,7 @@ class _AnimatedPopupBody extends StatelessWidget {
           ),
         ),
         SizedBox(height: 10),
-        FlatButton(
+        TextButton(
           child: Text('Show success'),
           onPressed: () => showSuccessPopup(
             context,

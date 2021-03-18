@@ -10,11 +10,11 @@ class PinPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            FlatButton(
+            TextButton(
                 child: Text('With Keyboard'),
                 onPressed: () =>
                     Navigator.push(context, MaterialPageRoute(builder: (context) => _PinPageKeyboardBody()))),
-            FlatButton(
+            TextButton(
                 child: Text('With custom input'),
                 onPressed: () =>
                     Navigator.push(context, MaterialPageRoute(builder: (context) => _PinPageCustomBody()))),

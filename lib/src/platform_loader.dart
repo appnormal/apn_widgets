@@ -11,9 +11,9 @@ import 'package:flutter/widgets.dart';
 const double _kDefaultIndicatorRadius = 10.0;
 
 class PlatformLoader extends StatelessWidget {
-  final Color cupertinoTintColor;
-  final Color cupertinoActiveTintColor;
-  final Color materialColor;
+  final Color? cupertinoTintColor;
+  final Color? cupertinoActiveTintColor;
+  final Color? materialColor;
 
   const PlatformLoader({
     this.cupertinoTintColor,
@@ -49,14 +49,12 @@ class PlatformLoader extends StatelessWidget {
 class CupertinoActivityIndicator extends StatefulWidget {
   /// Creates an iOS-style activity indicator.
   const CupertinoActivityIndicator(
-      {Key key,
+      {Key? key,
       this.animating = true,
       this.radius = _kDefaultIndicatorRadius,
       this.tintColor = CupertinoColors.lightBackgroundGray,
       this.activeTintColor})
-      : assert(animating != null),
-        assert(radius != null),
-        assert(radius > 0),
+      : assert(radius > 0),
         super(key: key);
 
   /// Whether the activity indicator is running its animation.
@@ -67,9 +65,9 @@ class CupertinoActivityIndicator extends StatefulWidget {
   /// The display color of the ticker
   ///
   /// Defaults to CupertinoColors.lightBackgroundGray
-  final Color tintColor;
+  final Color? tintColor;
 
-  final Color activeTintColor;
+  final Color? activeTintColor;
 
   /// Radius of the spinner widget.
   ///
@@ -81,7 +79,7 @@ class CupertinoActivityIndicator extends StatefulWidget {
 }
 
 class _CupertinoActivityIndicatorState extends State<CupertinoActivityIndicator> with SingleTickerProviderStateMixin {
-  AnimationController _controller;
+  AnimationController? _controller;
 
   @override
   void initState() {
@@ -91,7 +89,7 @@ class _CupertinoActivityIndicatorState extends State<CupertinoActivityIndicator>
       vsync: this,
     );
 
-    if (widget.animating) _controller.repeat();
+    if (widget.animating) _controller!.repeat();
   }
 
   @override
@@ -99,16 +97,16 @@ class _CupertinoActivityIndicatorState extends State<CupertinoActivityIndicator>
     super.didUpdateWidget(oldWidget);
     if (widget.animating != oldWidget.animating) {
       if (widget.animating) {
-        _controller.repeat();
+        _controller!.repeat();
       } else {
-        _controller.stop();
+        _controller!.stop();
       }
     }
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller!.dispose();
     super.dispose();
   }
 
@@ -138,7 +136,7 @@ class _CupertinoActivityIndicatorPainter extends CustomPainter {
     this.position,
     this.color,
     this.activeColor,
-    double radius,
+    required double radius,
   })  : tickFundamentalRRect = RRect.fromLTRBXY(
           -radius,
           1.0 * radius / _kDefaultIndicatorRadius,
@@ -149,10 +147,10 @@ class _CupertinoActivityIndicatorPainter extends CustomPainter {
         ),
         super(repaint: position);
 
-  final Animation<double> position;
+  final Animation<double>? position;
   final RRect tickFundamentalRRect;
-  final Color color;
-  final Color activeColor;
+  final Color? color;
+  final Color? activeColor;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -161,11 +159,11 @@ class _CupertinoActivityIndicatorPainter extends CustomPainter {
     canvas.save();
     canvas.translate(size.width / 2.0, size.height / 2.0);
 
-    final activeTick = (_kTickCount * position.value).floor();
+    final activeTick = (_kTickCount * position!.value).floor();
 
     for (var i = 0; i < _kTickCount; ++i) {
       final double t = (((i + activeTick) % _kTickCount) / _kHalfTickCount).clamp(0.0, 1.0);
-      paint.color = Color.lerp(activeColor, color, t);
+      paint.color = Color.lerp(activeColor, color, t)!;
       canvas.drawRRect(tickFundamentalRRect, paint);
       canvas.rotate(-_kTwoPI / _kTickCount);
     }

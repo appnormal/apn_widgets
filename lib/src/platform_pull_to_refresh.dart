@@ -8,27 +8,27 @@ import 'package:flutter/widgets.dart';
 /// * Maybe use this to improve further in the future is we want to have more control
 /// * over custom pull to refresh implementations on iOS and Android
 class PlatformPullToRefresh extends StatefulWidget {
-  final ScrollController controller;
+  final ScrollController? controller;
   final VoidCallback onRefresh;
   final int itemCount;
-  final EdgeInsets padding;
+  final EdgeInsets? padding;
   final IndexedWidgetBuilder itemBuilder;
-  final IndexedWidgetBuilder separatorBuilder;
-  final WidgetBuilder loadMoreIndicatorBuilder;
-  final VoidCallback onPageEndReached;
+  final IndexedWidgetBuilder? separatorBuilder;
+  final WidgetBuilder? loadMoreIndicatorBuilder;
+  final VoidCallback? onPageEndReached;
   final int scrollEndReachedThreshold;
   final bool hasMorePages;
 
   final int gridCrossAxisCount;
-  final double gridCrossAxisSpacing;
-  final double gridMainAxisSpacing;
-  final double gridChildAspectRatio;
+  final double? gridCrossAxisSpacing;
+  final double? gridMainAxisSpacing;
+  final double? gridChildAspectRatio;
 
   const PlatformPullToRefresh({
-    Key key,
-    @required this.onRefresh,
-    @required this.itemCount,
-    @required this.itemBuilder,
+    Key? key,
+    required this.onRefresh,
+    required this.itemCount,
+    required this.itemBuilder,
     this.controller,
     this.separatorBuilder,
     this.onPageEndReached,
@@ -47,17 +47,17 @@ class PlatformPullToRefresh extends StatefulWidget {
 }
 
 class _PlatformPullToRefreshState extends State<PlatformPullToRefresh> {
-  ScrollController _scrollController;
+  ScrollController? _scrollController;
 
   @override
   void initState() {
     super.initState();
     _scrollController = widget.controller ?? ScrollController();
 
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels >=
-          _scrollController.position.maxScrollExtent - widget.scrollEndReachedThreshold) {
-        if (widget.onPageEndReached != null) widget.onPageEndReached();
+    _scrollController!.addListener(() {
+      if (_scrollController!.position.pixels >=
+          _scrollController!.position.maxScrollExtent - widget.scrollEndReachedThreshold) {
+        if (widget.onPageEndReached != null) widget.onPageEndReached!();
       }
     });
   }
@@ -108,7 +108,7 @@ class _PlatformPullToRefreshState extends State<PlatformPullToRefresh> {
         if (position % 2 == 0) {
           return widget.itemBuilder(context, actualPosition);
         } else {
-          return widget.separatorBuilder(context, actualPosition + 1);
+          return widget.separatorBuilder!(context, actualPosition + 1);
         }
       };
     }
@@ -130,15 +130,15 @@ class _PlatformPullToRefreshState extends State<PlatformPullToRefresh> {
       List.filled(itemCount, null).asMap().forEach((index, _) => items.add(itemBuilder(context, index)));
       sliverList = SliverGrid.count(
         crossAxisCount: widget.gridCrossAxisCount,
-        crossAxisSpacing: widget.gridCrossAxisSpacing,
-        mainAxisSpacing: widget.gridMainAxisSpacing,
+        crossAxisSpacing: widget.gridCrossAxisSpacing!,
+        mainAxisSpacing: widget.gridMainAxisSpacing!,
         children: items,
-        childAspectRatio: widget.gridChildAspectRatio,
+        childAspectRatio: widget.gridChildAspectRatio!,
       );
     }
 
     if (widget.padding != null) {
-      sliverList = SliverPadding(padding: widget.padding, sliver: sliverList);
+      sliverList = SliverPadding(padding: widget.padding!, sliver: sliverList);
     }
 
     // * build the items list
@@ -173,13 +173,13 @@ class _PlatformPullToRefreshState extends State<PlatformPullToRefresh> {
 
       Widget sliverGrid = SliverGrid.count(
         crossAxisCount: widget.gridCrossAxisCount,
-        crossAxisSpacing: widget.gridCrossAxisSpacing,
-        mainAxisSpacing: widget.gridMainAxisSpacing,
+        crossAxisSpacing: widget.gridCrossAxisSpacing!,
+        mainAxisSpacing: widget.gridMainAxisSpacing!,
         children: items,
-        childAspectRatio: widget.gridChildAspectRatio,
+        childAspectRatio: widget.gridChildAspectRatio!,
       );
       if (widget.padding != null) {
-        sliverGrid = SliverPadding(padding: widget.padding, sliver: sliverGrid);
+        sliverGrid = SliverPadding(padding: widget.padding!, sliver: sliverGrid);
       }
 
       list = CustomScrollView(
@@ -202,7 +202,7 @@ class _PlatformPullToRefreshState extends State<PlatformPullToRefresh> {
         itemCount: itemCount,
         padding: widget.padding,
         itemBuilder: itemBuilder,
-        separatorBuilder: widget.separatorBuilder,
+        separatorBuilder: widget.separatorBuilder!,
       );
     }
 
@@ -221,7 +221,7 @@ class _PlatformPullToRefreshState extends State<PlatformPullToRefresh> {
 
   Widget _loadingIndicator(BuildContext context) {
     if (widget.loadMoreIndicatorBuilder != null) {
-      return widget.loadMoreIndicatorBuilder(context);
+      return widget.loadMoreIndicatorBuilder!(context);
     }
 
     return Container(
@@ -235,7 +235,7 @@ class _PlatformPullToRefreshState extends State<PlatformPullToRefresh> {
 
   @override
   void dispose() {
-    _scrollController.dispose();
+    _scrollController!.dispose();
     super.dispose();
   }
 }

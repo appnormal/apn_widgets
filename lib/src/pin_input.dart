@@ -1,7 +1,8 @@
 import 'package:apn_widgets/apn_widgets.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:keyboard_visibility/keyboard_visibility.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 const _kPlaceholder = '';
 
@@ -9,19 +10,19 @@ class PinInput extends StatefulWidget {
   final double height;
   final double spaceBetween;
   final TextEditingController controller;
-  final FocusNode focusNode;
-  final ValueSetter<String> onCodeCompleted;
+  final FocusNode? focusNode;
+  final ValueSetter<String>? onCodeCompleted;
   final bool hasError;
   final PinFieldBuilder pinFieldBuilder;
   final int pinInputsAmount;
 
   PinInput({
-    Key key,
+    Key? key,
     this.height = 56,
     this.hasError = false,
     this.spaceBetween = 4,
-    @required this.controller,
-    @required this.pinFieldBuilder,
+    required this.controller,
+    required this.pinFieldBuilder,
     this.focusNode,
     this.onCodeCompleted,
     this.pinInputsAmount = 4,
@@ -35,7 +36,6 @@ class _PinInputState extends State<PinInput> {
   final values = Map<int, String>();
   var previousValueLength;
 
-
   bool get showKeyboard => widget.focusNode != null;
 
   String get pinCodeValue => widget.controller.text;
@@ -48,8 +48,8 @@ class _PinInputState extends State<PinInput> {
 
     /// When you dismiss the keyboard on Android,
     /// we un-focus. So we can refocus in the onTap
-    KeyboardVisibilityNotification().addNewListener(
-      onChange: (visible) {
+    KeyboardVisibilityController().onChange.listen(
+      (visible) {
         if (!visible) widget.focusNode?.unfocus();
       },
     );
@@ -70,9 +70,9 @@ class _PinInputState extends State<PinInput> {
   }
 
   bool _isFieldFocused(int index) {
-    if (widget.focusNode != null && !widget.focusNode.hasFocus) return false;
+    if (widget.focusNode != null && !widget.focusNode!.hasFocus) return false;
 
-    final firstEmpty = values.entries.firstWhere((entry) => entry.value == _kPlaceholder, orElse: () => null);
+    final firstEmpty = values.entries.firstWhereOrNull((entry) => entry.value == _kPlaceholder);
     return firstEmpty?.key == index;
   }
 
@@ -96,8 +96,10 @@ class _PinInputState extends State<PinInput> {
       });
     }
 
-    if (widget.onCodeCompleted != null && splitted.length == widget.pinInputsAmount && splitted.length != previousValueLength) {
-      widget.onCodeCompleted(pinCodeValue);
+    if (widget.onCodeCompleted != null &&
+        splitted.length == widget.pinInputsAmount &&
+        splitted.length != previousValueLength) {
+      widget.onCodeCompleted!(pinCodeValue);
     }
 
     previousValueLength = splitted.length;
@@ -115,7 +117,8 @@ class _PinInputState extends State<PinInput> {
       )));
     });
 
-    final List<Widget> pinInputs = inputs.separated(SizedBox(width: widget.spaceBetween)).cast<Widget>();
+    final List<Widget> pinInputs =
+        inputs.separated(SizedBox(width: widget.spaceBetween)).cast<Widget>() as List<Widget>;
 
     /// Hidden form field to capture input
 
@@ -144,10 +147,10 @@ class _PinInputState extends State<PinInput> {
 }
 
 class PinFieldData {
-  final double height;
-  final bool isFocussed;
-  final bool hasError;
-  final String value;
+  final double? height;
+  final bool? isFocussed;
+  final bool? hasError;
+  final String? value;
 
   PinFieldData({this.height, this.isFocussed, this.hasError, this.value});
 }
@@ -156,19 +159,19 @@ typedef PinFieldBuilder = Widget Function(PinFieldData data);
 
 class PageInputKeyboard extends StatelessWidget {
   final DigitBuilder digitBuilder;
-  final Widget deleteButton;
-  final Widget leftAction;
+  final Widget? deleteButton;
+  final Widget? leftAction;
   final TextEditingController controller;
   final double horizontalSpacing;
   final double verticalSpacing;
-  final ShapeBorder shapeBorder;
+  final ShapeBorder? shapeBorder;
   final double childAspectRatio;
   final int pinInputsAmount;
 
   const PageInputKeyboard({
-    Key key,
-    @required this.digitBuilder,
-    @required this.controller,
+    Key? key,
+    required this.digitBuilder,
+    required this.controller,
     this.leftAction,
     this.deleteButton,
     this.horizontalSpacing = 20,
@@ -204,19 +207,19 @@ class PageInputKeyboard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [digitWidgets[0], digitWidgets[1], digitWidgets[2]].separated(SizedBox(
             width: horizontalSpacing,
-          )),
+          )) as List<Widget>,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [digitWidgets[3], digitWidgets[4], digitWidgets[5]].separated(SizedBox(
             width: horizontalSpacing,
-          )),
+          )) as List<Widget>,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [digitWidgets[6], digitWidgets[7], digitWidgets[8]].separated(SizedBox(
             width: horizontalSpacing,
-          )),
+          )) as List<Widget>,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -244,11 +247,11 @@ class PageInputKeyboard extends StatelessWidget {
                 : Container()
           ].separated(SizedBox(
             width: horizontalSpacing,
-          )),
+          )) as List<Widget>,
         )
       ].separated(SizedBox(
         height: verticalSpacing,
-      )),
+      )) as List<Widget>,
     );
   }
 }
@@ -256,7 +259,7 @@ class PageInputKeyboard extends StatelessWidget {
 typedef DigitBuilder = Widget Function(DigitData data);
 
 class DigitData {
-  final int digit;
+  final int? digit;
 
   DigitData({this.digit});
 }

@@ -46,31 +46,31 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text('Buttons'),
               onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ButtonsPage())),
             ),
-            FlatButton(
+            TextButton(
               child: Text('Lists'),
               onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ListsPage())),
             ),
-            FlatButton(
+            TextButton(
               child: Text('Dialogs'),
               onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => DialogsPage())),
             ),
-            FlatButton(
+            TextButton(
               child: Text('Placeholders & Loaders'),
               onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => PlaceholdersPage())),
             ),
-            FlatButton(
+            TextButton(
               child: Text('Search'),
               onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPage())),
             ),
-            FlatButton(
+            TextButton(
               child: Text('Pin'),
               onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => PinPage())),
             ),
-            FlatButton(
+            TextButton(
               child: Text('Animated popup'),
               onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => AnimatedPopupPage())),
             )

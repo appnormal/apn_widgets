@@ -8,14 +8,14 @@ const kDefaultButtonHeight = 55.0;
 
 class PrimaryButton extends StatelessWidget {
   final String title;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final bool loading;
-  final List<BoxShadow> boxShadow;
+  final List<BoxShadow>? boxShadow;
   final double borderRadius;
 
   const PrimaryButton({
-    Key key,
-    @required this.title,
+    Key? key,
+    required this.title,
     this.onPressed,
     this.boxShadow,
     this.loading = false,
@@ -54,17 +54,17 @@ class PrimaryButton extends StatelessWidget {
 }
 
 class PlatformButton extends StatelessWidget {
-  final VoidCallback onTap;
-  final Color color;
+  final VoidCallback? onTap;
+  final Color? color;
   final Widget child;
-  final EdgeInsets padding;
-  final BorderRadius borderRadius;
-  final List<BoxShadow> boxShadow;
+  final EdgeInsets? padding;
+  final BorderRadius? borderRadius;
+  final List<BoxShadow>? boxShadow;
 
   const PlatformButton({
-    Key key,
-    @required this.child,
-    @required this.onTap,
+    Key? key,
+    required this.child,
+    required this.onTap,
     this.color,
     this.padding,
     this.boxShadow,
@@ -122,13 +122,13 @@ class PlatformButton extends StatelessWidget {
 }
 
 class AppBarAction extends StatelessWidget {
-  final VoidCallback onTap;
-  final Widget child;
+  final VoidCallback? onTap;
+  final Widget? child;
   final EdgeInsets padding;
   final Color color;
 
   const AppBarAction({
-    Key key,
+    Key? key,
     this.onTap,
     this.child,
     this.padding = EdgeInsets.zero,

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io' if (kIsWeb) 'dart:html';
 
-import 'package:apn_http/apn_http.dart';
 import 'package:apn_widgets/apn_widgets.dart';
 import 'package:apn_widgets/src/ios_date_time_picker.dart';
 import 'package:apn_widgets/src/radio_button_dialog.dart';
@@ -19,64 +18,38 @@ const kStringConfirm = 'CONFIRM';
 
 class DialogPresenter extends StatefulWidget {
   static _DialogPresenterState of(BuildContext context) {
-    final presenterState = (context.dependOnInheritedWidgetOfExactType<DialogPresenterData>()).data;
+    final presenterState = context.dependOnInheritedWidgetOfExactType<DialogPresenterData>()!.data!;
     presenterState.callingContext = context;
     return presenterState;
   }
 
-  static void pop<T>(BuildContext context, [T result]) => of(context).popDialog(result);
+  static void pop<T>(BuildContext context, [T? result]) => of(context).popDialog(result);
 
-  const DialogPresenter({Key key, @required this.child, this.strings}) : super(key: key);
+  const DialogPresenter({Key? key, required this.child, this.strings}) : super(key: key);
 
   final Widget child;
-  final Map<String, String> strings;
+  final Map<String, String>? strings;
 
   @override
   _DialogPresenterState createState() => _DialogPresenterState();
 }
 
 class _DialogPresenterState extends State<DialogPresenter> {
-  BuildContext callingContext;
-  Map<String, String> strings;
+  late BuildContext callingContext;
+  late Map<String, String> strings;
 
-  Dialog activeDialog;
+  Dialog? activeDialog;
 
-  bool get hasStrings => strings != null && strings.isNotEmpty;
-
-  String get appName => hasStrings
-      ? strings.containsKey(kStringAppName)
-          ? strings[kStringAppName]
-          : 'App'
-      : 'App';
-
-  String get ok => hasStrings
-      ? strings.containsKey(kStringOK)
-          ? strings[kStringOK]
-          : 'OK'
-      : 'OK';
-
-  String get settings => hasStrings
-      ? strings.containsKey(kStringAppSettings)
-          ? strings[kStringAppSettings]
-          : 'Open settings'
-      : 'Open settings';
-
-  String get cancel => hasStrings
-      ? strings.containsKey(kStringCancel)
-          ? strings[kStringCancel]
-          : 'Cancel'
-      : 'Cancel';
-
-  String get confirm => hasStrings
-      ? strings.containsKey(kStringConfirm)
-          ? strings[kStringConfirm]
-          : 'Confirm'
-      : 'Confirm';
+  String get appName => strings[kStringAppName] ?? 'App';
+  String get ok => strings[kStringOK] ?? 'OK';
+  String get settings => strings[kStringAppSettings] ?? 'Open settings';
+  String get cancel => strings[kStringCancel] ?? 'Cancel';
+  String get confirm => strings[kStringConfirm] ?? 'Confirm';
 
   @override
   void initState() {
     super.initState();
-    strings = widget.strings;
+    strings = widget.strings ?? {};
   }
 
   void updateStrings(Map<String, String> stringMap) {
@@ -91,9 +64,9 @@ class _DialogPresenterState extends State<DialogPresenter> {
     );
   }
 
-  void _completeActive<T>([T result]) {
-    if (activeDialog != null && !activeDialog.completer.isCompleted) {
-      activeDialog.completer.complete(result);
+  void _completeActive<T>([T? result]) {
+    if (activeDialog != null && !activeDialog!.completer.isCompleted) {
+      activeDialog!.completer.complete(result);
       final canPop = Navigator.of(callingContext).canPop();
       if (canPop) {
         Navigator.of(callingContext).pop();
@@ -108,11 +81,11 @@ class _DialogPresenterState extends State<DialogPresenter> {
     showDialog(context: callingContext, builder: (_) => dialog.widget);
   }
 
-  Future<void> showError(ErrorResponse error) => showAlert(appName, error.error.message);
+  Future<void> showError(Object error) => showAlert(appName, error.toString());
 
-  void popDialog<T>([T result]) => _completeActive(result);
+  void popDialog<T>([T? result]) => _completeActive(result);
 
-  Future<T> showAlert<T>(String title, String message, {List<Widget> actions}) {
+  Future<T?> showAlert<T>(String title, String message, {List<Widget>? actions}) {
     final alert = WillPopScope(
       onWillPop: () async {
         _completeActive();
@@ -133,7 +106,7 @@ class _DialogPresenterState extends State<DialogPresenter> {
       ),
     );
 
-    final dialog = Dialog<T>(alert);
+    final dialog = Dialog<T?>(alert);
 
     _presentDialog(dialog);
 
@@ -162,9 +135,9 @@ class _DialogPresenterState extends State<DialogPresenter> {
   Future<int> showPlatformChoiceDialog(
     List<PlatformChoiceAction> actions,
     String title,
-    String cancelButtonText,
-    String confirmButtonText, {
-    Widget message,
+    String? cancelButtonText,
+    String? confirmButtonText, {
+    Widget? message,
   }) {
     final completer = Completer<int>();
 
@@ -195,7 +168,7 @@ class _DialogPresenterState extends State<DialogPresenter> {
                 onPressed: () => Navigator.of(callingContext).pop(),
                 isDefaultAction: true,
                 child: Text(
-                  cancelButtonText,
+                  cancelButtonText!,
                   style: const TextStyle(color: CupertinoColors.activeBlue),
                 ),
               ),
@@ -226,17 +199,17 @@ class _DialogPresenterState extends State<DialogPresenter> {
     return completer.future;
   }
 
-  Future<File> showImagePickerDialog(
-      {@required String optionsTitle,
-      @required String cameraOption,
-      @required String galleryOption,
-      @required String errorTitle,
-      @required String errorMessage}) async {
+  Future<File?> showImagePickerDialog(
+      {required String optionsTitle,
+      required String cameraOption,
+      required String galleryOption,
+      required String errorTitle,
+      required String errorMessage}) async {
     final picker = ImagePicker();
 
     final actions = [PlatformChoiceAction(text: cameraOption), PlatformChoiceAction(text: galleryOption)];
 
-    PickedFile pickedImage;
+    PickedFile? pickedImage;
 
     //Ask for source
     final choice = await DialogPresenter.of(callingContext).showPlatformChoiceDialog(
@@ -263,12 +236,20 @@ class _DialogPresenterState extends State<DialogPresenter> {
       DialogPresenter.of(callingContext).showOpenAppSettingsAlert(errorTitle, errorMessage);
     }
 
-    return File(pickedImage.path);
+    if (pickedImage != null) {
+      return File(pickedImage.path);
+    } else {
+      return null;
+    }
   }
 
-  Future<DateTime> showDatePickerDialog(MaterialColor primarySwatch,
-      {DateTime initialDate, DateTime maxDate, DateTime minDate}) async {
-    DateTime picked;
+  Future<DateTime?> showDatePickerDialog(
+    MaterialColor primarySwatch, {
+    required DateTime maxDate,
+    required DateTime minDate,
+    DateTime? initialDate,
+  }) async {
+    DateTime? picked;
     if (Theme.of(callingContext).platform == TargetPlatform.iOS) {
       picked = await showCupertinoModalPopup<DateTime>(
         context: callingContext,
@@ -287,14 +268,14 @@ class _DialogPresenterState extends State<DialogPresenter> {
         firstDate: minDate,
         lastDate: maxDate,
         // can't be null if infinite like iOS
-        builder: (BuildContext context, Widget child) {
+        builder: (BuildContext context, Widget? child) {
           return Theme(
             data: ThemeData.from(
                 colorScheme: ColorScheme.fromSwatch(
               primarySwatch: primarySwatch,
               backgroundColor: Colors.white,
             )),
-            child: child,
+            child: child!,
           );
         },
       );
@@ -303,12 +284,12 @@ class _DialogPresenterState extends State<DialogPresenter> {
     return picked;
   }
 
-  Future<TimeOfDay> showTimeOfDayPickerDialog({
-    TimeOfDay initialTime,
+  Future<TimeOfDay?> showTimeOfDayPickerDialog({
+    TimeOfDay? initialTime,
     int minuteInterval = 1,
     bool use24HourFormat = false,
   }) async {
-    TimeOfDay picked;
+    TimeOfDay? picked;
     var currentDate = DateTime.now();
     if (Theme.of(callingContext).platform == TargetPlatform.iOS) {
       var pickedDateTime = await showCupertinoModalPopup(
@@ -342,7 +323,7 @@ class _DialogPresenterState extends State<DialogPresenter> {
           builder: (context, child) {
             return MediaQuery(
               data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: use24HourFormat),
-              child: child,
+              child: child!,
             );
           });
     }
@@ -352,11 +333,11 @@ class _DialogPresenterState extends State<DialogPresenter> {
 }
 
 class DialogPresenterData extends InheritedWidget {
-  final _DialogPresenterState data;
+  final _DialogPresenterState? data;
 
   DialogPresenterData({
     this.data,
-    @required Widget child,
+    required Widget child,
   }) : super(child: child);
 
   @override
@@ -378,7 +359,7 @@ class PlatformChoiceAction {
   final bool isDestructiveAction;
 
   PlatformChoiceAction({
-    @required this.text,
+    required this.text,
     this.isDefaultAction = false,
     this.isDestructiveAction = false,
   });

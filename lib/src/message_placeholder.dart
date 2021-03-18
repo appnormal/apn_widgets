@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class MessagePlaceholder extends StatelessWidget {
   final Text child;
 
-  const MessagePlaceholder({Key key, @required this.child}) : super(key: key);
+  const MessagePlaceholder({Key? key, required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

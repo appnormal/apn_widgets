@@ -1,4 +1,3 @@
-import 'package:apn_analytics/apn_analytics.dart';
 import 'package:apn_widgets/apn_widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -6,32 +5,34 @@ const kTabHeight = 56.0;
 
 class BaseTabsPage extends StatefulWidget {
   const BaseTabsPage({
-    this.tabs,
+    required this.tabs,
     this.decoration,
     this.startTabIndex,
     this.tabLabelStyle,
     this.unselectedColor = Colors.black,
     this.selectedColor,
     this.onTabChanged,
+    this.onTabActive,
     this.height = kTabHeight,
   });
 
-  final int startTabIndex;
-  final double height;
   final List<TabItem> tabs;
-  final BoxDecoration decoration;
-  final TextStyle tabLabelStyle;
+  final int? startTabIndex;
+  final double height;
+  final BoxDecoration? decoration;
+  final TextStyle? tabLabelStyle;
   final Color unselectedColor;
-  final Color selectedColor;
-  final ValueSetter<int> onTabChanged;
+  final Color? selectedColor;
+  final ValueSetter<int>? onTabChanged;
+  final ValueSetter<TabItem>? onTabActive;
 
   @override
   _BaseTabsPageState createState() => _BaseTabsPageState();
 }
 
 class _BaseTabsPageState extends State<BaseTabsPage> {
-  int _currentTab;
-  List<TabItem> _tabContent;
+  late List<TabItem> _tabContent;
+  int _currentTab = 0;
 
   @override
   void initState() {
@@ -42,7 +43,7 @@ class _BaseTabsPageState extends State<BaseTabsPage> {
     _tabContent = widget.tabs;
     _tabContent.asMap().entries.forEach((entry) => entry.value.index = entry.key);
 
-    _trackCurrentScreen();
+    _onTabActive();
   }
 
   @override
@@ -61,8 +62,8 @@ class _BaseTabsPageState extends State<BaseTabsPage> {
         decoration: widget.decoration,
         onTap: (selectedTab) {
           setState(() => _currentTab = selectedTab);
-          if(widget.onTabChanged != null) widget.onTabChanged(selectedTab);
-          _trackCurrentScreen();
+          if (widget.onTabChanged != null) widget.onTabChanged!(selectedTab);
+          _onTabActive();
         },
         items: _tabContent.asMap().entries.map((entry) {
           final unselectedColor = widget.unselectedColor;
@@ -83,21 +84,23 @@ class _BaseTabsPageState extends State<BaseTabsPage> {
     );
   }
 
-  void _trackCurrentScreen() {
-    FirebaseAnalyticsService.instance.trackScreen(_tabContent[_currentTab].route);
+  void _onTabActive() {
+    if (widget.onTabActive != null) {
+      widget.onTabActive!(_tabContent[_currentTab]);
+    }
   }
 }
 
 class TabBar extends StatelessWidget {
-  final ValueSetter<int> onTap;
+  final ValueSetter<int>? onTap;
   final List<TabBarItem> items;
-  final BoxDecoration decoration;
-  final double height;
+  final BoxDecoration? decoration;
+  final double? height;
 
   const TabBar({
-    Key key,
+    Key? key,
+    required this.items,
     this.onTap,
-    this.items,
     this.height,
     this.decoration,
   }) : super(key: key);
@@ -124,7 +127,7 @@ class TabBar extends StatelessWidget {
       child: TappableOverlay(
         highlightColor: Theme.of(context).accentColor.withOpacity(0.1),
         pressedColor: Colors.white,
-        onTap: () => onTap(item.tabIndex),
+        onTap: () => onTap!(item.tabIndex),
         child: Center(child: item),
       ),
     );
@@ -134,19 +137,19 @@ class TabBar extends StatelessWidget {
 class TabBarItem extends StatelessWidget {
   final int tabIndex;
   final Widget icon;
-  final String label;
-  final TextStyle labelStyle;
+  final String? label;
+  final TextStyle? labelStyle;
   final bool isActive;
   final Color unselectedColor;
   final Color selectedColor;
 
   const TabBarItem({
-    Key key,
-    @required this.tabIndex,
-    @required this.icon,
-    @required this.isActive,
-    @required this.unselectedColor,
-    @required this.selectedColor,
+    Key? key,
+    required this.tabIndex,
+    required this.icon,
+    required this.isActive,
+    required this.unselectedColor,
+    required this.selectedColor,
     this.label,
     this.labelStyle,
   }) : super(key: key);
@@ -162,7 +165,7 @@ class TabBarItem extends StatelessWidget {
         DefaultTextStyle(
           style: TextStyle(color: isActive ? selectedColor : unselectedColor),
           child: Text(
-            label,
+            label!,
             style: labelStyle,
             key: ValueKey('tab_label_$tabIndex'),
           ),
@@ -178,14 +181,14 @@ class TabBarItem extends StatelessWidget {
 }
 
 class TabItem {
-  int index;
-  final Widget content;
+  int? index;
+  final Widget? content;
   final String icon;
-  final String label;
-  final String route;
+  final String? label;
+  final String? route;
 
   TabItem({
-    this.icon,
+    required this.icon,
     this.content,
     this.label,
     this.route,

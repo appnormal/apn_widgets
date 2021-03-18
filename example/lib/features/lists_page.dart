@@ -19,13 +19,9 @@ class _ListsPageBody extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          FlatButton(
+          TextButton(
             child: Text('Pull to refresh'),
             onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => _PullToRefreshList())),
-          ),
-          FlatButton(
-            child: Text('Data list'),
-            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => _DataList())),
           ),
         ],
       ),
@@ -45,33 +41,6 @@ class _PullToRefreshList extends StatelessWidget {
           itemCount: 5,
           onRefresh: () => {},
           itemBuilder: (BuildContext context, int index) => Container(child: Text('ITEM')),
-        ),
-      ),
-    );
-  }
-}
-
-class _DataList extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    var counter = 1;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Pull to refresh'),
-      ),
-      body: Center(
-        child: DataList(
-          listBuilder: (items) {
-            counter++;
-            return items[counter];
-          },
-          data: [
-            Text('ITEM'),
-            Text('ITEM'),
-            Text('ITEM'),
-            Text('ITEM'),
-            Text('ITEM'),
-          ],
         ),
       ),
     );

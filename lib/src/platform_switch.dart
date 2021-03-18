@@ -3,18 +3,18 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class PlatformSwitch extends StatelessWidget {
-  final Color activeColor;
-  final Color activeTrackColor;
-  final Color inactiveTrackColor;
-  final Color activeThumbColor;
-  final Color inactiveThumbColor;
+  final Color? activeColor;
+  final Color? activeTrackColor;
+  final Color? inactiveTrackColor;
+  final Color? activeThumbColor;
+  final Color? inactiveThumbColor;
 
   final DragStartBehavior dragStartBehaviour;
   final bool value;
-  final ValueChanged<bool> onValueChanged;
+  final ValueChanged<bool>? onValueChanged;
 
   const PlatformSwitch({
-    Key key,
+    Key? key,
     this.value = false,
     this.onValueChanged,
     this.activeColor,
@@ -44,9 +44,9 @@ class PlatformSwitch extends StatelessWidget {
         onChanged: onValueChanged,
         activeColor: activeColor,
         dragStartBehavior: dragStartBehaviour,
-        activeTrackColor: activeTrackColor.withOpacity(0.6),
+        activeTrackColor: activeTrackColor!.withOpacity(0.6),
         inactiveThumbColor: inactiveThumbColor,
-        inactiveTrackColor: inactiveTrackColor.withOpacity(0.6),
+        inactiveTrackColor: inactiveTrackColor!.withOpacity(0.6),
       ),
     );
   }
