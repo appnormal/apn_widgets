@@ -1,6 +1,6 @@
 name: apn_widgets
 description: A carefully curated collection of widget made by and used within Appnormal projects
-version: 2.0.0-beta.2
+version: 2.0.0
 homepage: https://appnormal.com
 
 environment:
@@ -13,8 +13,8 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   app_settings: ^4.1.0
-  flare_flutter: ^3.0.0-nullsafety.1
-  image_picker: ^0.7.3
+  flare_flutter: ^3.0.0
+  image_picker: ^0.7.4
   intl: ^0.17.0
   collection: ^1.15.0
 

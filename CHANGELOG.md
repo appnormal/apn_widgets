@@ -1,3 +1,7 @@
+## [2.0.0] - 10 apr 2021
+
+* Drop `beta` pre-release
+
 ## [2.0.0-beta.2] - 18 mar 2021
 
 * Removed the unfocus on keyboard dismiss on `PinInput` (and the related dependency).
