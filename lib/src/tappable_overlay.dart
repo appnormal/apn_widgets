@@ -70,8 +70,8 @@ class _TappableOverlayState extends State<TappableOverlay> {
     }
 
     final childSizeContainer = Container(
-      width: childSize?.width ?? 0,
-      height: childSize?.height ?? 0,
+      width: childSize?.width ?? 2,
+      height: childSize?.height ?? 2,
     );
 
     if (isIos) {
