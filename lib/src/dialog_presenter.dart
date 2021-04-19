@@ -38,8 +38,6 @@ class _DialogPresenterState extends State<DialogPresenter> {
   late BuildContext callingContext;
   late Map<String, String> strings;
 
-  Dialog? activeDialog;
-
   String get appName => strings[kStringAppName] ?? 'App';
   String get ok => strings[kStringOK] ?? 'OK';
   String get settings => strings[kStringAppSettings] ?? 'Open settings';
@@ -64,46 +62,33 @@ class _DialogPresenterState extends State<DialogPresenter> {
     );
   }
 
-  void _completeActive<T>([T? result]) {
-    if (activeDialog != null && !activeDialog!.completer.isCompleted) {
-      activeDialog!.completer.complete(result);
-      final canPop = Navigator.of(callingContext).canPop();
-      if (canPop) {
-        Navigator.of(callingContext).pop();
-      }
-    }
-  }
-
   void _presentDialog(Dialog dialog) {
-    _completeActive();
-
-    activeDialog = dialog;
-    showDialog(context: callingContext, builder: (_) => dialog.widget);
+    showDialog(context: callingContext, builder: (_) => dialog.widget)
+        .then((value) => dialog.completer.complete(value));
   }
 
   Future<void> showError(Object error) => showAlert(appName, error.toString());
 
-  void popDialog<T>([T? result]) => _completeActive(result);
+  void popDialog<T>([T? result]) {
+    final canPop = Navigator.of(callingContext).canPop();
+    if (canPop) {
+      Navigator.of(callingContext).pop(result);
+    }
+  }
 
   Future<T?> showAlert<T>(String title, String message, {List<Widget>? actions}) {
-    final alert = WillPopScope(
-      onWillPop: () async {
-        _completeActive();
-        return true;
-      },
-      child: PlatformAlertDialog(
-        title: Text(title),
-        content: Text(message),
-        actions: actions ??
-            <Widget>[
-              PlatformAlertDialogAction(
-                child: Text(ok),
-                onPressed: () {
-                  popDialog();
-                },
-              )
-            ],
-      ),
+    final alert = PlatformAlertDialog(
+      title: Text(title),
+      content: Text(message),
+      actions: actions ??
+          <Widget>[
+            PlatformAlertDialogAction(
+              child: Text(ok),
+              onPressed: () {
+                popDialog();
+              },
+            )
+          ],
     );
 
     final dialog = Dialog<T?>(alert);

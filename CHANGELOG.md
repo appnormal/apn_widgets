@@ -1,3 +1,7 @@
+## [2.0.2] - 19 apr 2021
+
+* Bugfix in DialogHelper
+
 ## [2.0.1] - 11 apr 2021
 
 * Make default size for tappable overlay 2x2 pixels. So that tests can tap them before the actual child content size is determined (in de next frame)
