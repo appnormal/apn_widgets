@@ -1,3 +1,7 @@
+## [2.0.4] - 20 apr 2021
+
+* Fix bug in null safety in platform pull to refresh
+
 ## [2.0.3] - 20 apr 2021
 
 * Add better default for specifying no highlight color in TappableOverlay

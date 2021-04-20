@@ -53,11 +53,11 @@ class _PlatformPullToRefreshState extends State<PlatformPullToRefresh> {
   void initState() {
     super.initState();
     _scrollController = widget.controller ?? ScrollController();
-
-    _scrollController!.addListener(() {
-      if (_scrollController!.position.pixels >=
-          _scrollController!.position.maxScrollExtent - widget.scrollEndReachedThreshold) {
-        if (widget.onPageEndReached != null) widget.onPageEndReached!();
+    _scrollController?.addListener(() {
+      final pixel = _scrollController?.position.pixels ?? 0;
+      final max = _scrollController?.position.maxScrollExtent ?? 1000;
+      if (pixel >= max - widget.scrollEndReachedThreshold && widget.onPageEndReached != null) {
+        widget.onPageEndReached!();
       }
     });
   }
