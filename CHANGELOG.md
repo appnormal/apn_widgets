@@ -1,3 +1,7 @@
+## [2.0.3] - 20 apr 2021
+
+* Add better default for specifying no highlight color in TappableOverlay
+
 ## [2.0.2] - 19 apr 2021
 
 * Bugfix in DialogHelper

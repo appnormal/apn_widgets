@@ -58,7 +58,7 @@ class _TappableOverlayState extends State<TappableOverlay> {
   Widget build(BuildContext context) {
     final isIos = Theme.of(context).platform == TargetPlatform.iOS || widget.disableIosTappable;
     final pressedColor = (widget.pressedColor ?? Colors.white).withOpacity(0.3);
-    final highlightColor = widget.highlightColor ?? pressedColor.darken().withOpacity(0.2);
+    final highlightColor = (widget.highlightColor ?? Colors.black).withOpacity(0.1);
 
     Widget child = widget.child;
 
