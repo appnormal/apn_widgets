@@ -125,7 +125,7 @@ class TabBar extends StatelessWidget {
   Widget _selectableTab(BuildContext context, TabBarItem item) {
     return Expanded(
       child: TappableOverlay(
-        highlightColor: Theme.of(context).accentColor.withOpacity(0.1),
+        highlightColor: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
         pressedColor: Colors.white,
         onTap: () => onTap!(item.tabIndex),
         child: Center(child: item),

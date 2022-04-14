@@ -1,5 +1,4 @@
 import 'package:apn_widgets/apn_widgets.dart';
-import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -63,8 +62,9 @@ class _PinInputState extends State<PinInput> {
   bool _isFieldFocused(int index) {
     if (widget.focusNode != null && !widget.focusNode!.hasFocus) return false;
 
-    final firstEmpty = values.entries.firstWhereOrNull((entry) => entry.value == _kPlaceholder);
-    return firstEmpty?.key == index;
+    final matches = values.entries.where((entry) => entry.value == _kPlaceholder);
+    if(matches.isEmpty) return false;
+    return matches.first.key == index;
   }
 
   void _updatePinValues(String value) {

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 
-import 'extensions.dart';
 
 /// Used primarily for cards, ripple on Android and animated pressed color on iOS
 class TappableOverlay extends StatefulWidget {

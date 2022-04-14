@@ -194,7 +194,7 @@ class _DialogPresenterState extends State<DialogPresenter> {
 
     final actions = [PlatformChoiceAction(text: cameraOption), PlatformChoiceAction(text: galleryOption)];
 
-    PickedFile? pickedImage;
+    XFile? pickedImage;
 
     //Ask for source
     final choice = await DialogPresenter.of(callingContext).showPlatformChoiceDialog(
@@ -209,11 +209,11 @@ class _DialogPresenterState extends State<DialogPresenter> {
       switch (choice) {
         //Camera
         case 0:
-          pickedImage = await picker.getImage(source: ImageSource.camera);
+          pickedImage = await picker.pickImage(source: ImageSource.camera);
           break;
         //Gallery
         case 1:
-          pickedImage = await picker.getImage(source: ImageSource.gallery);
+          pickedImage = await picker.pickImage(source: ImageSource.gallery);
           break;
       }
     } on PlatformException catch (_) {

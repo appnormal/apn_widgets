@@ -139,7 +139,7 @@ class AppBarAction extends StatelessWidget {
   Widget build(BuildContext context) {
     return TappableOverlay(
       pressedColor: Colors.white,
-      highlightColor: Theme.of(context).accentColor.withOpacity(0.2),
+      highlightColor: Theme.of(context).colorScheme.secondary.withOpacity(0.2),
       onTap: onTap,
       child: Padding(
         padding: padding,

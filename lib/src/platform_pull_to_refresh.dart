@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:apn_widgets/apn_widgets.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart' as material;
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
+
 
 /// * Maybe use this to improve further in the future is we want to have more control
 /// * over custom pull to refresh implementations on iOS and Android
@@ -67,7 +67,7 @@ class _PlatformPullToRefreshState extends State<PlatformPullToRefresh> {
     var itemCount = widget.itemCount;
     var itemBuilder = widget.itemBuilder;
 
-    if (material.ThemeData().platform == TargetPlatform.iOS) {
+    if (ThemeData().platform == TargetPlatform.iOS) {
       return _createForIOS(itemCount, itemBuilder);
     } else {
       return _createForAndroid(itemCount, itemBuilder);
@@ -207,7 +207,7 @@ class _PlatformPullToRefreshState extends State<PlatformPullToRefresh> {
     }
 
     // * To get a "free" material refresh indicator we wrap the scrollview in a refresh indicator.
-    return material.RefreshIndicator(onRefresh: () async => widget.onRefresh(), child: list);
+    return RefreshIndicator(onRefresh: () async => widget.onRefresh(), child: list);
   }
 
   IndexedWidgetBuilder addLoadingIndicatorItemBuilder(int itemCount, IndexedWidgetBuilder itemBuilder) {

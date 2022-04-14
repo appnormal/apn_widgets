@@ -38,7 +38,7 @@ class PlatformSwitch extends StatelessWidget {
     }
 
     return Theme(
-      data: ThemeData(accentColor: activeThumbColor),
+      data: ThemeData(colorScheme: ColorScheme.fromSwatch().copyWith(secondary: activeThumbColor)),
       child: Switch(
         value: value,
         onChanged: onValueChanged,
