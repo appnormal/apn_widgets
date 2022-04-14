@@ -184,12 +184,11 @@ class _DialogPresenterState extends State<DialogPresenter> {
     return completer.future;
   }
 
-  Future<File?> showImagePickerDialog(
-      {required String optionsTitle,
-      required String cameraOption,
-      required String galleryOption,
-      required String errorTitle,
-      required String errorMessage}) async {
+  Future<File?> showImagePickerDialog({
+    required String optionsTitle,
+    required String cameraOption,
+    required String galleryOption,
+  }) async {
     final picker = ImagePicker();
 
     final actions = [PlatformChoiceAction(text: cameraOption), PlatformChoiceAction(text: galleryOption)];
@@ -217,8 +216,7 @@ class _DialogPresenterState extends State<DialogPresenter> {
           break;
       }
     } on PlatformException catch (_) {
-      //We don't have permission if we get here, so let's let the user know
-      DialogPresenter.of(callingContext).showOpenAppSettingsAlert(errorTitle, errorMessage);
+      return null;
     }
 
     if (pickedImage != null) {

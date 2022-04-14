@@ -1,3 +1,7 @@
+## [2.0.5] - 30 nov 2021
+
+* Remove internal image picker error handling and just return null on error
+
 ## [2.0.4] - 20 apr 2021
 
 * Fix bug in null safety in platform pull to refresh
