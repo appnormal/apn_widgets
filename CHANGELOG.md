@@ -1,3 +1,7 @@
+## [2.0.6] - 14 apr 2022
+
+* Update dependencies
+
 ## [2.0.5] - 30 nov 2021
 
 * Remove internal image picker error handling and just return null on error
