@@ -44,7 +44,6 @@ class __PinPageKeyboardBodyState extends State<_PinPageKeyboardBody> {
 
   @override
   Widget build(BuildContext context) {
-
     return ExamplePage(
       title: 'Pin with keyboard',
       child: Padding(
@@ -56,9 +55,9 @@ class __PinPageKeyboardBodyState extends State<_PinPageKeyboardBody> {
           hasError: false,
           onCodeCompleted: (pinCode) {},
           pinFieldBuilder: (data) => _PinField(
-            height: data.height,
-            value: data.value,
-            isFocused: data.isFocussed,
+            height: data.height!,
+            value: data.value!,
+            isFocused: data.isFocussed!,
             hasError: false,
           ),
         ),
@@ -96,9 +95,9 @@ class __PinPageCustomBodyState extends State<_PinPageCustomBody> {
               pinInputsAmount: 3,
               onCodeCompleted: (pinCode) => {},
               pinFieldBuilder: (data) => _PinField(
-                height: data.height,
-                value: data.value,
-                isFocused: data.isFocussed,
+                height: data.height!,
+                value: data.value!,
+                isFocused: data.isFocussed!,
                 hasError: false,
               ),
             ),
@@ -107,7 +106,7 @@ class __PinPageCustomBodyState extends State<_PinPageCustomBody> {
               pinInputsAmount: 5,
               controller: controller,
               deleteButton: _DeleteButton(),
-              digitBuilder: (DigitData data) => _CustomInput(value: data.digit),
+              digitBuilder: (DigitData data) => _CustomInput(value: data.digit!),
             ),
           ]),
         ));
@@ -115,15 +114,11 @@ class __PinPageCustomBodyState extends State<_PinPageCustomBody> {
 }
 
 class _DeleteButton extends StatelessWidget {
-  final VoidCallback onDeleteTapped;
-
-  const _DeleteButton({Key key, this.onDeleteTapped}) : super(key: key);
+  const _DeleteButton();
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('DEL'),
-    );
+    return Center(child: Text('DEL'));
   }
 }
 
@@ -131,9 +126,8 @@ class _CustomInput extends StatelessWidget {
   final int value;
 
   const _CustomInput({
-    Key key,
-    this.value,
-  }) : super(key: key);
+    required this.value,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -153,12 +147,11 @@ class _PinField extends StatelessWidget {
   final bool hasError;
 
   const _PinField({
-    Key key,
-    this.height,
-    this.value,
+    required this.height,
+    required this.value,
     this.isFocused = false,
     this.hasError = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

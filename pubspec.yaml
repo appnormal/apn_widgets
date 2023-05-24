@@ -1,10 +1,10 @@
 name: apn_widgets
 description: A carefully curated collection of widget made by and used within Appnormal projects
-version: 2.0.6
+version: 3.0.0-beta.1
 homepage: https://appnormal.com
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: '>2.12.0 <3.0.0'
   flutter: ">=2.0.0"
 
 dependencies:
@@ -15,7 +15,7 @@ dependencies:
   app_settings: ^4.1.0
   flare_flutter: ^3.0.0
   image_picker: ^0.8.5
-  intl: ^0.17.0
+  intl: 
 
 flutter:
   uses-material-design: true

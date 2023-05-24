@@ -1,3 +1,9 @@
+## [3.0.0-beta.1] - 24 may 2023
+
+* Null-safety enabled
+* Loosen intl dependency
+* Compatible with Dart 3.0
+
 ## [2.0.6] - 14 apr 2022
 
 * Update dependencies

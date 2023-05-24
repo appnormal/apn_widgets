@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 /// Used primarily for cards, ripple on Android and animated pressed color on iOS
 class TappableOverlay extends StatefulWidget {
   final VoidCallback? onTap;
@@ -157,7 +156,7 @@ class _MeasureSize extends StatefulWidget {
   _MeasureSizeState createState() => _MeasureSizeState();
 }
 
-class _MeasureSizeState extends State<_MeasureSize>  {
+class _MeasureSizeState extends State<_MeasureSize> {
   var widgetKey = GlobalKey();
   var oldSize;
 
@@ -184,7 +183,7 @@ class _MeasureSizeState extends State<_MeasureSize>  {
   }
 
   void measureSizeNextFrame() {
-    WidgetsBinding.instance?.addPostFrameCallback(measureWidget);
+    WidgetsBinding.instance.addPostFrameCallback(measureWidget);
   }
 
   void measureWidget(_) {

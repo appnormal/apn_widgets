@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 class ExamplePage extends StatelessWidget {
   final String title;
   final Widget child;
-  final Widget appBar;
+  final PreferredSizeWidget? appBar;
 
   const ExamplePage({
-    Key key,
-    this.title,
-    this.child,
+    Key? key,
+    required this.title,
+    required this.child,
     this.appBar,
   }) : super(key: key);
 

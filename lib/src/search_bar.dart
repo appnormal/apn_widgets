@@ -2,8 +2,8 @@ import 'package:apn_widgets/apn_widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class SearchBar extends StatefulWidget {
-  const SearchBar({
+class ApnSearchBar extends StatefulWidget {
+  const ApnSearchBar({
     Key? key,
     required this.controller,
     required this.onFieldSubmitted,
@@ -33,10 +33,10 @@ class SearchBar extends StatefulWidget {
   final EdgeInsets? padding;
 
   @override
-  _SearchBarState createState() => _SearchBarState();
+  _ApnSearchBarState createState() => _ApnSearchBarState();
 }
 
-class _SearchBarState extends State<SearchBar> {
+class _ApnSearchBarState extends State<ApnSearchBar> {
   bool showSuffixIcon = false;
 
   @override
@@ -53,9 +53,10 @@ class _SearchBarState extends State<SearchBar> {
     return Container(
       height: 63.0,
       padding: widget.padding ?? EdgeInsets.only(left: 20.0),
-      decoration: widget.decoration ?? BoxDecoration(
-        color: Colors.white,
-      ),
+      decoration: widget.decoration ??
+          BoxDecoration(
+            color: Colors.white,
+          ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
@@ -83,11 +84,12 @@ class _SearchBarState extends State<SearchBar> {
                     ),
               ),
               cursorColor: Colors.blueAccent,
-              style: widget.textStyle ?? TextStyle(
-                color: Colors.black,
-                fontSize: 16.0,
-                fontWeight: FontWeight.w600,
-              ),
+              style: widget.textStyle ??
+                  TextStyle(
+                    color: Colors.black,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w600,
+                  ),
               controller: widget.controller,
               textInputAction: TextInputAction.search,
               onFieldSubmitted: widget.onFieldSubmitted,
@@ -102,9 +104,7 @@ class _SearchBarState extends State<SearchBar> {
               onTap: widget.onSearchCleared,
               color: Colors.transparent,
               child: Icon(
-                Theme
-                    .of(context)
-                    .platform == TargetPlatform.iOS ? CupertinoIcons.clear_circled_solid : Icons.clear,
+                Theme.of(context).platform == TargetPlatform.iOS ? CupertinoIcons.clear_circled_solid : Icons.clear,
                 color: widget.suffixIconColor ?? Colors.black,
               ),
             ),
