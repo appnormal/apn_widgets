@@ -1,3 +1,7 @@
+## [3.0.0] - 29 nov 2023
+
+* Updated dependencies to all new major versions
+
 ## [3.0.0-beta.1] - 24 may 2023
 
 * Null-safety enabled
