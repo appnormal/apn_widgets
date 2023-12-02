@@ -63,7 +63,7 @@ class _PinInputState extends State<PinInput> {
     if (widget.focusNode != null && !widget.focusNode!.hasFocus) return false;
 
     final matches = values.entries.where((entry) => entry.value == _kPlaceholder);
-    if(matches.isEmpty) return false;
+    if (matches.isEmpty) return false;
     return matches.first.key == index;
   }
 
@@ -108,8 +108,7 @@ class _PinInputState extends State<PinInput> {
       )));
     });
 
-    final List<Widget> pinInputs =
-        inputs.separated(SizedBox(width: widget.spaceBetween)).cast<Widget>() as List<Widget>;
+    final List<Widget> pinInputs = inputs.separated(SizedBox(width: widget.spaceBetween));
 
     /// Hidden form field to capture input
 
@@ -198,19 +197,19 @@ class PageInputKeyboard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [digitWidgets[0], digitWidgets[1], digitWidgets[2]].separated(SizedBox(
             width: horizontalSpacing,
-          )) as List<Widget>,
+          )),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [digitWidgets[3], digitWidgets[4], digitWidgets[5]].separated(SizedBox(
             width: horizontalSpacing,
-          )) as List<Widget>,
+          )),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [digitWidgets[6], digitWidgets[7], digitWidgets[8]].separated(SizedBox(
             width: horizontalSpacing,
-          )) as List<Widget>,
+          )),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -238,11 +237,11 @@ class PageInputKeyboard extends StatelessWidget {
                 : Container()
           ].separated(SizedBox(
             width: horizontalSpacing,
-          )) as List<Widget>,
+          )),
         )
       ].separated(SizedBox(
         height: verticalSpacing,
-      )) as List<Widget>,
+      )),
     );
   }
 }
