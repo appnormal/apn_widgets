@@ -25,8 +25,10 @@ extension IterableExtension on Iterable {
   Iterable<V> merge<V>() => expand<V>((e) => e).toList();
 
   Iterable unique() => toSet().toList();
+}
 
-  Iterable separated(Widget separator) {
+extension IterableWidgetExtension on Iterable<Widget> {
+  List<Widget> separated(Widget separator) {
     List<Widget> list = map((element) => <Widget>[element, separator]).merge<Widget>().toList();
     if (list.isNotEmpty) list = list..removeLast();
     return list;

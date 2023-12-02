@@ -1,3 +1,7 @@
+## [3.0.1] - 29 nov 2023
+
+* Improve .separated extension
+
 ## [3.0.0] - 29 nov 2023
 
 * Updated dependencies to all new major versions
