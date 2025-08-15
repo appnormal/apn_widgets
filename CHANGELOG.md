@@ -1,3 +1,8 @@
+## [4.0.0] - 15 aug 2025
+
+* BREAKING: Removed AnimatedPopup and flare flutter dependency
+* Updated all dependencies to their latest versions
+
 ## [3.0.1] - 29 nov 2023
 
 * Improve .separated extension

@@ -1,4 +1,3 @@
-import 'package:example/features/animated_popup_page.dart';
 import 'package:example/features/buttons_page.dart';
 import 'package:example/features/dialogs_page.dart';
 import 'package:example/features/lists_page.dart';
@@ -70,10 +69,6 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Text('Pin'),
               onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => PinPage())),
             ),
-            TextButton(
-              child: Text('Animated popup'),
-              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => AnimatedPopupPage())),
-            )
           ],
         ),
       ),
